@@ -194,17 +194,6 @@ class CameraPreview implements SurfaceHolder.Callback {
 
         //止めないでsetParameters()するとエラーとなる場合があるため止める
         mCamera.stopPreview();
-
-        /*
-        //if(mFocusFlag){
-        	mFocus = new AutoFocusCallback(){
-        		public void onAutoFocus(boolean success, Camera camera) {
-        			//mCamera.setOneShotPreviewCallback(mPreviewCallback);
-        			mCamera.setPreviewCallback(mPreviewCallback);
-        		}
-        	};
-        //}
-        */
         
         //設定画面で設定したとき
         if(mSetValue != null){
@@ -259,15 +248,6 @@ class CameraPreview implements SurfaceHolder.Callback {
     
     private void setAllParameters(){
         Camera.Parameters param = mCamera.getParameters();
-        
-        /*
-        param.setColorEffect(mEffect);            
-        param.setSceneMode(mScene);
-        param.setWhiteBalance(mWhite);
-        mSize = mSupportList.get(mOffset + mPicIdx);        
-        param.setPreviewSize(mSize.width, mSize.height);
-        mCamera.setParameters(param);
-        */
 
         //一度に複数のパラメータを設定すると落ちる端末があるため、1つずつ設定する
         try{
@@ -301,25 +281,15 @@ class CameraPreview implements SurfaceHolder.Callback {
     }
     
     public void resumePreview(){
-    	//Log.d(TAG, "enter CameraPreview#resumePreview");
-    	
-    	/*
-    	if(mFocusFlag){
-    		mCamera.startPreview();
-    		mCamera.autoFocus(mFocus);
-    	}
-    	*/
-    	//else{
-    		if(mPreviewCallback != null){
-    			if(mCamera != null){
-    				mCamera.startPreview();
-    				mCamera.setPreviewCallback(mPreviewCallback);
-    			}
+    	if(mPreviewCallback != null){
+    		if(mCamera != null){
+    			mCamera.startPreview();
+    			mCamera.setPreviewCallback(mPreviewCallback);
     		}
-    	//}
-    		
-    		//ボタン表示を「停止」に変更する
-    		((ContShooting)mContext).displayStop();
+    	}
+
+    	//ボタン表示を「停止」に変更する
+    	((ContShooting)mContext).displayStop();
     }
     
     public void stopPreview(){
@@ -405,8 +375,8 @@ class CameraPreview implements SurfaceHolder.Callback {
     List<String> getSizeList(){
     	List<String> list = new ArrayList<String>();
     	for(int i = mOffset; i<mSupportList.size(); i++){
-    		//String size = mSupportList.get(i).width + "x" + mSupportList.get(i).height;
-    		String size = mSupportList.get(i).height + "x" + mSupportList.get(i).width;
+    		String size = mSupportList.get(i).width + "x" + mSupportList.get(i).height;
+    		//String size = mSupportList.get(i).height + "x" + mSupportList.get(i).width;
     		list.add(size);
     	}
     	return list;

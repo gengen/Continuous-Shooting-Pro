@@ -102,12 +102,14 @@ public class ContShooting extends Activity {
         SurfaceView sv = (SurfaceView)findViewById(R.id.camera);
         mHolder = sv.getHolder();
 
+        /*
         //初期画面表示(全体の高さの3/4をプレビューサイズの初期値とする)
         int margin = mHeight / 4;
         mPrevHeight = mHeight - margin;
         mPrevWidth = (mPrevHeight / 3) * 4;
         sv.setLayoutParams(new LinearLayout.LayoutParams(mPrevWidth, mPrevHeight));
         //sv.setLayoutParams(new LinearLayout.LayoutParams(544, 320));
+         */
 
         mPreview = new CameraPreview(this);
         mPreview.setField(effect, scene, white, size);
@@ -215,11 +217,13 @@ public class ContShooting extends Activity {
         mWebView = null;
 
         //全体の高さの3/4をプレビューサイズの初期値とする
+        /*
         int margin = mHeight / 4;
         mPrevHeight = mHeight - margin;
         mPrevWidth = (mPrevHeight / 3) * 4;
         SurfaceView sv = (SurfaceView)findViewById(R.id.camera);
         sv.setLayoutParams(new LinearLayout.LayoutParams(mPrevWidth, mPrevHeight));
+        */
         
         displayNormalMode();
         mMaskFlag = false;
@@ -491,24 +495,6 @@ public class ContShooting extends Activity {
     }
     
     public void finish(){
-        //Log.d(TAG, "enter ContShooting#finish");
-    	/*
-    	new AlertDialog.Builder(this)
-    	.setTitle(R.string.pi_finish)
-    	.setMessage(getString(R.string.pi_finish_confirm))
-    	.setPositiveButton(R.string.pi_ok, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				System.exit(RESULT_OK);
-			}
-		})
-		.setNegativeButton(R.string.pi_ng, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				return;
-			}
-		})
-		.show();
-		*/
-
         //アプリのキャッシュ削除
         deleteCache(getCacheDir());
         

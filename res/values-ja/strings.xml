@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">無音連写カメラくん</string>
+    <string name="app_name">無音連写カメラくんPro</string>
     <string name="sc_hidden">Hidden mode now</string>
     <string name="sc_number">撮影数</string>
     <string name="sc_menu_gallery">ギャラリー</string>

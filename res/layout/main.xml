@@ -7,12 +7,12 @@
 
 <FrameLayout 
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="0pt"
     android:layout_weight="1"
 >
 <LinearLayout 
     android:id="@+id/parent"
-	android:orientation="horizontal"
+	android:orientation="vertical"
    	android:layout_width="fill_parent"
    	android:layout_height="fill_parent"	
     android:gravity="center"
@@ -20,15 +20,15 @@
 
        <LinearLayout 
        android:id="@+id/linear"
-       android:layout_width="wrap_content"
-       android:layout_height="fill_parent"
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content"
        >       
        </LinearLayout>
 
        <SurfaceView
        android:id="@+id/camera"
-       android:layout_width="wrap_content"
-       android:layout_height="fill_parent"
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content"
        >
        </SurfaceView>
        
