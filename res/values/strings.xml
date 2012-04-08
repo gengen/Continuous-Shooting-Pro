@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">cont. shootin\'</string>
+    <string name="sc_hidden">Hidden mode now</string>
+    <string name="sc_number">num</string>
+    <string name="sc_menu_gallery">gallery</string>
+    <string name="sc_menu_gallery_ng">Coundn\'t launch gallery.</string>
+    <string name="sc_menu_setting">settings</string>
+    
+    <string name="sc_alert_title">Notify</string>
+    <string name="sc_alert_sd">Please insert a SD card.</string>
+    <string name="sc_alert_ok">OK</string>
+    
+    <string name="sc_error_title">Error</string>
+    <string name="sc_error_cam">Coundn\'t launch camera</string>
+    <string name="sc_error_cam_ok">OK</string>
+
+    <string name="category_shooting">Continuous shooting settings</string>
+	<string name="category_effect">Effect settings</string>
+	<string name="category_display">Display settings</string>
+    
+    <string name="color_effect">color_effect</string>
+    <string name="color_effect_title">Color effect</string>
+	<string name="dialog_color_effect_title">Color effect</string>
+	<string name="color_effect_summary">Set color effect</string>
+	
+	<string name="scene_mode">scene_mode</string>
+	<string name="scene_mode_title">Scene mode</string>
+	<string name="dialog_scene_mode_title">Scene mode</string>
+	<string name="scene_mode_summary">Set scene mode</string>
+
+	<string name="white_balance">white_balance</string>
+	<string name="white_balance_title">White balance</string>
+	<string name="dialog_white_balance_title">White balance</string>
+	<string name="white_balance_summary">Set white balance</string>
+	
+	<string name="picture_size">picture_size</string>
+	<string name="picture_size_title">Picture size</string>
+	<string name="dialog_picture_size_title">Picture size</string>
+	<string name="picture_size_summary">Set picture size</string>
+	
+	<string name="shoot_num">shoot_num</string>
+	<string name="shoot_num_title">Shooting number</string>
+	<string name="dialog_shoot_num_title">Shooting number</string>
+	<string name="shoot_num_summary">Set shooting number</string>
+    <string name="shoot_num_unlimited">Unlimited</string>
+	
+	<string name="interval">interval</string>
+	<string name="interval_title">Interval</string>
+	<string name="dialog_interval_title">Interval</string>
+	<string name="interval_summary">Set shooting interval</string>
+	<string name="interval_not_set">No setting</string>
+    <string name="str_sec">sec.</string>
+    
+   	<string name="display_hide_title">Hidden mode setting</string>
+	<string name="display_hide_summary">Set hidden mode when launching app</string>
+</resources>

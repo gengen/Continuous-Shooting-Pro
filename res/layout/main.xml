@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:orientation="vertical"
+   android:layout_width="fill_parent"
+   android:layout_height="fill_parent"
+   >
+
+<FrameLayout 
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+>
+<LinearLayout 
+    android:id="@+id/parent"
+	android:orientation="horizontal"
+   	android:layout_width="fill_parent"
+   	android:layout_height="fill_parent"	
+    android:gravity="center"
+>
+
+       <LinearLayout 
+       android:id="@+id/linear"
+       android:layout_width="wrap_content"
+       android:layout_height="fill_parent"
+       >       
+       </LinearLayout>
+
+       <SurfaceView
+       android:id="@+id/camera"
+       android:layout_width="wrap_content"
+       android:layout_height="fill_parent"
+       >
+       </SurfaceView>
+       
+</LinearLayout>
+</FrameLayout>
+
+<LinearLayout
+       android:layout_width="fill_parent"
+       android:layout_height="50sp"
+       android:orientation="horizontal"
+   	   android:gravity="bottom"
+       >
+    
+	   <ImageButton
+       android:id="@+id/mask_imgbtn"
+       android:src="@drawable/scale_down"
+       android:layout_height="50sp"
+       android:layout_width="50sp"
+	   android:background="@null"
+	   android:scaleType="fitXY"
+	   >
+       </ImageButton>
+       
+       <ImageButton 
+           android:id="@+id/focusbtn"
+           android:src="@drawable/focus"
+           android:background="@null"
+	       android:layout_height="50sp"
+    	   android:layout_width="50sp"
+    	   android:scaleType="fitXY"
+       />
+       
+	   <LinearLayout
+	    android:id="@+id/adspace"
+    	android:layout_width="0pt"
+    	android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+       >
+       </LinearLayout>
+       
+	   <TextView
+    	android:layout_width="0pt"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+       android:background="#00000000"
+	   >
+       </TextView>
+
+	   <TextView
+       android:id="@+id/text1"
+       android:layout_height="fill_parent"
+       android:layout_width="wrap_content"
+       android:gravity="center"
+       android:background="#00000000"
+       android:text="" 
+       >
+       </TextView>
+	   <ImageButton
+       android:id="@+id/imgbtn"
+       android:src="@drawable/start"
+       android:background="@null"
+       android:layout_height="50sp"
+       android:layout_width="50sp"
+       android:layout_gravity="right"
+	   android:scaleType="fitXY"
+       >
+       </ImageButton>
+</LinearLayout>
+</LinearLayout>

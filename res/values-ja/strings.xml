@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">無音連写カメラくん</string>
+    <string name="sc_hidden">Hidden mode now</string>
+    <string name="sc_number">撮影数</string>
+    <string name="sc_menu_gallery">ギャラリー</string>
+    <string name="sc_menu_gallery_ng">ギャラリーを起動できません</string>
+    <string name="sc_menu_setting">設定</string>
+
+    <string name="sc_alert_title">通知</string>
+    <string name="sc_alert_sd">SDカードが利用できません</string>
+    <string name="sc_alert_ok">確認（アプリ終了）</string>
+
+    <string name="sc_error_title">エラー</string>
+    <string name="sc_error_cam">カメラが起動できません</string>
+    <string name="sc_error_cam_ok">確認（アプリ終了）</string>
+
+    <string name="category_shooting">連写設定</string>
+	<string name="category_effect">エフェクト設定</string>
+    <string name="category_display">画面設定</string>
+
+    <string name="color_effect">color_effect</string>
+	<string name="color_effect_title">色合い</string>
+	<string name="dialog_color_effect_title">色合い</string>
+	<string name="color_effect_summary">写真の色合いを変更する</string>
+		
+	<string name="scene_mode">scene_mode</string>
+	<string name="scene_mode_title">撮影シーン</string>
+	<string name="dialog_scene_mode_title">撮影シーン</string>
+	<string name="scene_mode_summary">撮影のシーンを設定する</string>
+	
+	<string name="white_balance">white_balance</string>
+	<string name="white_balance_title">ホワイトバランス</string>
+	<string name="dialog_white_balance_title">ホワイトバランス</string>
+	<string name="white_balance_summary">ホワイトバランスを調整する</string>
+	
+	<string name="picture_size">picture_size</string>
+	<string name="picture_size_title">画像サイズ</string>
+	<string name="dialog_picture_size_title">画像サイズ</string>
+	<string name="picture_size_summary">画像サイズを設定する</string>
+    
+	<string name="shoot_num">shoot_num</string>
+	<string name="shoot_num_title">連写枚数</string>
+	<string name="dialog_shoot_num_title">連写枚数</string>
+	<string name="shoot_num_summary">連写枚数を設定する</string>
+	<string name="shoot_num_unlimited">指定無し</string>
+	    	    	
+	<string name="interval">interval</string>
+	<string name="interval_title">連写間隔</string>
+	<string name="dialog_interval_title">連写間隔</string>
+	<string name="interval_summary">連写間隔を設定する</string>
+	<string name="interval_not_set">指定無し</string>
+	<string name="str_sec">秒</string>
+	
+	<string name="display_hide_title">隠しモード設定</string>
+	<string name="display_hide_summary">起動時に「隠しモード」に設定する</string>
+</resources>

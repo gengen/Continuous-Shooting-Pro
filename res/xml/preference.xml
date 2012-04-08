@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android">
+      <PreferenceCategory android:title="@string/category_shooting">
+      	<ListPreference 
+    		android:key="@string/picture_size"
+			android:title="@string/picture_size_title"   
+    		android:dialogTitle="@string/dialog_picture_size_title"
+			android:summary="@string/picture_size_summary"
+			>
+		</ListPreference>
+
+    	<ListPreference 
+    		android:key="@string/shoot_num"
+			android:title="@string/shoot_num_title"   
+    		android:dialogTitle="@string/dialog_shoot_num_title"
+			android:summary="@string/shoot_num_summary"
+			android:entries="@array/entries"
+			android:entryValues="@array/entryvalues"
+			android:defaultValue="0" 
+			>
+		</ListPreference>
+  
+    	<ListPreference 
+    		android:key="@string/interval"
+			android:title="@string/interval_title"   
+    		android:dialogTitle="@string/dialog_interval_title"
+			android:summary="@string/interval_summary"
+			android:entries="@array/int_entries"
+			android:entryValues="@array/int_entryvalues"
+			android:defaultValue="0" 
+			>
+		</ListPreference>
+
+   	</PreferenceCategory>
+  
+      <PreferenceCategory android:title="@string/category_effect">
+    	<ListPreference 
+    		android:key="@string/color_effect"
+			android:title="@string/color_effect_title"   
+    		android:dialogTitle="@string/dialog_color_effect_title"
+			android:summary="@string/color_effect_summary"
+			>
+		</ListPreference>
+
+    	<ListPreference 
+    		android:key="@string/scene_mode"
+			android:title="@string/scene_mode_title"   
+    		android:dialogTitle="@string/dialog_scene_mode_title"
+			android:summary="@string/scene_mode_summary"
+			>
+		</ListPreference>
+
+    	<ListPreference 
+    		android:key="@string/white_balance"
+			android:title="@string/white_balance_title"   
+    		android:dialogTitle="@string/dialog_white_balance_title"
+			android:summary="@string/white_balance_summary"
+			>
+		</ListPreference>
+	</PreferenceCategory>   
+
+      <PreferenceCategory android:title="@string/category_display">
+        <CheckBoxPreference 
+        	android:key="display_hide"
+            android:title="@string/display_hide_title"
+        	android:summary="@string/display_hide_summary"
+        	>
+        </CheckBoxPreference>
+	</PreferenceCategory>   
+</PreferenceScreen>
