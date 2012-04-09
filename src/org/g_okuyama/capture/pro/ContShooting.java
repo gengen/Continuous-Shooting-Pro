@@ -210,7 +210,7 @@ public class ContShooting extends Activity {
         LinearLayout layout = (LinearLayout)findViewById(R.id.linear);
         layout.removeView(mWebView);
         layout.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, 
+                LinearLayout.LayoutParams.FILL_PARENT, 
                 LinearLayout.LayoutParams.WRAP_CONTENT));
         mWebView.setWebViewClient(null);
         mWebView.destroy();
@@ -239,8 +239,8 @@ public class ContShooting extends Activity {
         mWebView.getSettings().setAppCacheEnabled(false);
         LinearLayout layout = (LinearLayout)findViewById(R.id.linear);
         layout.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, 
                 LinearLayout.LayoutParams.FILL_PARENT, 
+                LinearLayout.LayoutParams.WRAP_CONTENT, 
                 1));
         layout.addView(mWebView);
         
@@ -252,8 +252,8 @@ public class ContShooting extends Activity {
         }
 
         SurfaceView sv = (SurfaceView)findViewById(R.id.camera);
-        int hide_width = mPrevWidth / 6;
-        int hide_height = mPrevHeight / 6;
+        int hide_width = mWidth / 6;
+        int hide_height = hide_width * (4/3);
         sv.setLayoutParams(new LinearLayout.LayoutParams(hide_width, hide_height));
         displayHideMode();
         mMaskFlag = true;
