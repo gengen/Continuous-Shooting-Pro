@@ -476,7 +476,6 @@ class CameraPreview implements SurfaceHolder.Callback {
 
             final int width = size.width;
             final int height = size.height;            
-            int[] rgb = new int[(width * height)];
             
             Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 
@@ -484,6 +483,7 @@ class CameraPreview implements SurfaceHolder.Callback {
             task.execute(bmp);
 
             /*
+            int[] rgb = new int[(width * height)];
             Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 
             decodeYUV420SP(rgb, data, width, height);
@@ -501,6 +501,13 @@ class CameraPreview implements SurfaceHolder.Callback {
 
             savedata(out.toByteArray());
             */
+
+            /*
+            try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+			}
+			*/
             
             if(mInterval == 0){
                 //コールバックを再開

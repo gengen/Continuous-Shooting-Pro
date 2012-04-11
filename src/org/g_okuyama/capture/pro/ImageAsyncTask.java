@@ -36,6 +36,7 @@ public class ImageAsyncTask extends AsyncTask<Bitmap, Void, Bitmap> {
         int[] rgb = new int[(width * height)];
         decodeYUV420SP(rgb, mData, width, height);
         bmp[0].setPixels(rgb, 0, width, 0, 0, width, height);
+        rgb = null;
         
         //‰ñ“]
         Matrix matrix = new Matrix();
@@ -43,17 +44,25 @@ public class ImageAsyncTask extends AsyncTask<Bitmap, Void, Bitmap> {
         matrix.postRotate(90.0f);   
         retBmp = Bitmap.createBitmap(bmp[0], 0, 0, bmp[0].getWidth(), bmp[0].getHeight(), matrix, true);
         bmp[0].recycle();
+        bmp[0] = null;
         
+        try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+		}
+        
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        retBmp.compress(Bitmap.CompressFormat.JPEG, 100, out);
+
+        savedata(out.toByteArray());
+        retBmp.recycle();
+        retBmp = null;
+
         return retBmp;
     }
 
     @Override
     protected void onPostExecute(Bitmap bmp) {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 100, out);
-
-        savedata(out.toByteArray());
-        bmp.recycle();
     }
     
     // YUV420 to BMP 
