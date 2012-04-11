@@ -477,12 +477,17 @@ class CameraPreview implements SurfaceHolder.Callback {
             final int width = size.width;
             final int height = size.height;            
             int[] rgb = new int[(width * height)];
+            
+            Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 
+            ImageAsyncTask task = new ImageAsyncTask(mContext, data, size);
+            task.execute(bmp);
+
+            /*
             Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 
             decodeYUV420SP(rgb, data, width, height);
             bmp.setPixels(rgb, 0, width, 0, 0, width, height);
-            
             
             //‰ñ“]
             Matrix matrix = new Matrix();
@@ -493,14 +498,8 @@ class CameraPreview implements SurfaceHolder.Callback {
 
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             bmp2.compress(Bitmap.CompressFormat.JPEG, 100, out);
-            
+
             savedata(out.toByteArray());
-            
-            //oneshot‚Ì‚Æ‚«‚ÍƒRƒƒ“ƒgŠO‚·
-            /*
-            if(mFocusFlag){
-            	camera.autoFocus(mFocus);
-            }
             */
             
             if(mInterval == 0){
@@ -578,17 +577,6 @@ class CameraPreview implements SurfaceHolder.Callback {
 			//values.put(Images.Media.LONGITUDE,0.0);
 			//values.put(Images.Media.ORIENTATION,"");
 			((ContShooting)mContext).saveGallery(values);
-
-			/*
-			((ContShooting)mContext).count();
-			mNum++;
-			if(mMax!=0){
-			    if(mNum >= mMax){
-			        mPreview.stopPreview();
-			        ((ContShooting)mContext).setMode(0);
-			    }
-			}
-			*/
         } 
         
         // YUV420 to BMP 

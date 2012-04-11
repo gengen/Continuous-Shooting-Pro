@@ -224,6 +224,10 @@ public class ContShooting extends Activity {
         SurfaceView sv = (SurfaceView)findViewById(R.id.camera);
         sv.setLayoutParams(new LinearLayout.LayoutParams(mPrevWidth, mPrevHeight));
         */
+        SurfaceView sv = (SurfaceView)findViewById(R.id.camera);
+        sv.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.FILL_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT));
         
         displayNormalMode();
         mMaskFlag = false;
