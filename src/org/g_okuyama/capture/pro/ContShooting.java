@@ -18,6 +18,7 @@ import android.os.Environment;
 import android.provider.MediaStore.Images.Media;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SurfaceHolder;
@@ -27,6 +28,7 @@ import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -102,17 +104,8 @@ public class ContShooting extends Activity {
         SurfaceView sv = (SurfaceView)findViewById(R.id.camera);
         mHolder = sv.getHolder();
 
-        /*
-        //初期画面表示(全体の高さの3/4をプレビューサイズの初期値とする)
-        int margin = mHeight / 4;
-        mPrevHeight = mHeight - margin;
-        mPrevWidth = (mPrevHeight / 3) * 4;
-        sv.setLayoutParams(new LinearLayout.LayoutParams(mPrevWidth, mPrevHeight));
-        //sv.setLayoutParams(new LinearLayout.LayoutParams(544, 320));
-         */
-
         mPreview = new CameraPreview(this);
-        mPreview.setField(effect, scene, white, size);
+        mPreview.setField(effect, scene, white, size, mWidth, mHeight);
         mHolder.addCallback(mPreview);
         mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
@@ -143,14 +136,16 @@ public class ContShooting extends Activity {
 					if(mMode == 0){
 						mPreview.resumePreview();
 						mMode = 1;
-                        //フォーカスボタンを見えなくする
+                        //フォーカスボタンとマスクボタンを見えなくする
                         mFocusButton.setVisibility(View.INVISIBLE);
+                        mMaskButton.setVisibility(View.INVISIBLE);
 					}
 					else{
 						mPreview.stopPreview();
 						mMode = 0;
-                        //フォーカスボタンを見えるようにする
+                        //フォーカスボタンとマスクボタンを見えるようにする
                         mFocusButton.setVisibility(View.VISIBLE);
+                        mMaskButton.setVisibility(View.VISIBLE);
 					}
 				}
 			}
@@ -207,27 +202,25 @@ public class ContShooting extends Activity {
     }
     
     public void setToNormal(){
-        LinearLayout layout = (LinearLayout)findViewById(R.id.linear);
+        FrameLayout layout = (FrameLayout)findViewById(R.id.linear);
         layout.removeView(mWebView);
-        layout.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.FILL_PARENT, 
-                LinearLayout.LayoutParams.WRAP_CONTENT));
+        layout.setLayoutParams(new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.FILL_PARENT, 
+                FrameLayout.LayoutParams.WRAP_CONTENT));
         mWebView.setWebViewClient(null);
         mWebView.destroy();
         mWebView = null;
 
-        //全体の高さの3/4をプレビューサイズの初期値とする
         /*
-        int margin = mHeight / 4;
-        mPrevHeight = mHeight - margin;
-        mPrevWidth = (mPrevHeight / 3) * 4;
         SurfaceView sv = (SurfaceView)findViewById(R.id.camera);
-        sv.setLayoutParams(new LinearLayout.LayoutParams(mPrevWidth, mPrevHeight));
-        */
-        SurfaceView sv = (SurfaceView)findViewById(R.id.camera);
-        sv.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.FILL_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
+        sv.setLayoutParams(new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.FILL_PARENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT));
+                */
+        FrameLayout frame = (FrameLayout)findViewById(R.id.camera_parent);
+        frame.setLayoutParams(new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.FILL_PARENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT));
         
         displayNormalMode();
         mMaskFlag = false;
@@ -235,16 +228,15 @@ public class ContShooting extends Activity {
     }
     
     public void setToHidden(){
-        //WebView view = (WebView)findViewById(R.id.review);
         mWebView = new WebView(ContShooting.this);
         mWebView.setWebViewClient(new WebViewClient());
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setBuiltInZoomControls(true);
         mWebView.getSettings().setAppCacheEnabled(false);
-        LinearLayout layout = (LinearLayout)findViewById(R.id.linear);
-        layout.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.FILL_PARENT, 
-                LinearLayout.LayoutParams.WRAP_CONTENT, 
+        FrameLayout layout = (FrameLayout)findViewById(R.id.linear);
+        layout.setLayoutParams(new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.FILL_PARENT, 
+                FrameLayout.LayoutParams.WRAP_CONTENT, 
                 1));
         layout.addView(mWebView);
         
@@ -255,14 +247,22 @@ public class ContShooting extends Activity {
             mWebView.loadUrl(URL_OTHER);
         }
 
+        /*
         SurfaceView sv = (SurfaceView)findViewById(R.id.camera);
         int hide_width = mWidth / 6;
         int hide_height = hide_width * (4/3);
-        sv.setLayoutParams(new LinearLayout.LayoutParams(hide_width, hide_height));
+        sv.setLayoutParams(new FrameLayout.LayoutParams(hide_width, hide_height));
+        */        
+
+        FrameLayout frame = (FrameLayout)findViewById(R.id.camera_parent);
+        int hide_width = mWidth / 6;
+        int hide_height = hide_width * (4/3);
+        frame.setLayoutParams(new FrameLayout.LayoutParams(hide_width, hide_height, Gravity.BOTTOM));
+
         displayHideMode();
         mMaskFlag = true;
-        setTitle(R.string.sc_hidden);        
-}
+        setTitle(R.string.sc_hidden);
+    }
     
     public void onStart(){
     	//Log.d(TAG, "enter ContShooting#onStart");

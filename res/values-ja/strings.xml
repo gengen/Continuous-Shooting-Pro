@@ -54,4 +54,14 @@
 	
 	<string name="display_hide_title">隠しモード設定</string>
 	<string name="display_hide_summary">起動時に「隠しモード」に設定する</string>
+
+	<string name="resolution_title">高解像度モード</string>
+	<string name="resolution_summary">高解像度で連写する</string>
+	
+	<string name="ok">OK</string>
+	<string name="ng">キャンセル</string>
+	<string name="pref_confirm_title">確認</string>
+	<string name="pref_confirm_message">
+	    高解像度モードは画像サイズが大きくなるため連写速度が落ちます。高解像度モードに設定しますか？
+	</string>
 </resources>

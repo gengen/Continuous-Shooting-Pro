@@ -6,33 +6,33 @@
    >
 
 <FrameLayout 
-    android:layout_width="fill_parent"
-    android:layout_height="0pt"
-    android:layout_weight="1"
->
-<LinearLayout 
     android:id="@+id/parent"
 	android:orientation="vertical"
    	android:layout_width="fill_parent"
-   	android:layout_height="fill_parent"	
+   	android:layout_height="0pt"
+   	android:layout_weight="1"	
     android:gravity="center"
 >
 
-       <LinearLayout 
+       <FrameLayout 
        android:id="@+id/linear"
        android:layout_width="fill_parent"
        android:layout_height="wrap_content"
        >       
-       </LinearLayout>
+       </FrameLayout>
 
+       <FrameLayout
+       android:id="@+id/camera_parent"
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content"
+		>           
        <SurfaceView
        android:id="@+id/camera"
        android:layout_width="fill_parent"
-       android:layout_height="wrap_content"
+       android:layout_height="fill_parent"
        >
        </SurfaceView>
-       
-</LinearLayout>
+       </FrameLayout>       
 </FrameLayout>
 
 <LinearLayout

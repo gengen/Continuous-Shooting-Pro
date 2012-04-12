@@ -1,14 +1,19 @@
 package org.g_okuyama.capture.pro;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceChangeListener;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.util.Log;
 
 public class ContShootingPreference extends PreferenceActivity implements OnPreferenceChangeListener{
@@ -124,6 +129,30 @@ public class ContShootingPreference extends PreferenceActivity implements OnPref
         else{
             intPref.setSummary(intStr + " " + getString(R.string.str_sec));
         }
+        
+        //çÇâëúìxÉÇÅ[Éh
+        CheckBoxPreference resolutionPref = (CheckBoxPreference)this.findPreference("high_resolution");
+        resolutionPref.setOnPreferenceClickListener(new OnPreferenceClickListener(){
+            public boolean onPreferenceClick(Preference preference) {
+                new AlertDialog.Builder(ContShootingPreference.this)
+                .setTitle(R.string.pref_confirm_title)
+                .setMessage(R.string.pref_confirm_message)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        //âΩÇ‡ÇµÇ»Ç¢
+                    }
+                })
+                .setNegativeButton(R.string.ng, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        //âΩÇ‡ÇµÇ»Ç¢
+                        return;
+                    }
+                })
+                .show();
+                return false;
+            }
+        });
+        
 }
     
     public static String getCurrentEffect(Context c){
@@ -174,6 +203,11 @@ public class ContShootingPreference extends PreferenceActivity implements OnPref
     public static boolean isHidden(Context c){
         return PreferenceManager.getDefaultSharedPreferences(c)
                 .getBoolean("display_hide", false);
+    }
+    
+    public static boolean isHighMode(Context c){
+        return PreferenceManager.getDefaultSharedPreferences(c)
+                .getBoolean("high_resolution", false);
     }
 
 	public boolean onPreferenceChange(Preference pref, Object newValue) {

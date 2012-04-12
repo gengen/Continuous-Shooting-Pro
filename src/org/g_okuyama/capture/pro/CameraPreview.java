@@ -77,18 +77,24 @@ class CameraPreview implements SurfaceHolder.Callback {
 	
 	//連写間隔
 	private int mInterval = 0;
-		
+    
+    //画面サイズ
+    int mWidth = 0;
+    int mHeight = 0;
+    
     CameraPreview(Context context){
         mContext = context;
 	}
 	
-	public void setField(String effect, String scene, String white, String size){
+    public void setField(String effect, String scene, String white, String size, int width, int height){
         mEffect = effect;
         mScene = scene;
         mWhite = white;
         //mPicIdx = size;
         mSizeStr = size;
-	}
+        mWidth = width;
+        mHeight = height;
+    }
     
     public void surfaceCreated(SurfaceHolder holder) {
     	//Log.d(TAG, "enter CameraPreview#surfaceCreated");
@@ -152,7 +158,6 @@ class CameraPreview implements SurfaceHolder.Callback {
             }
             */
             
-            /*
             for(int i = 0; i < mSupportList.size(); i++){
                 if(mSupportList.get(i).width > mWidth){
                     continue;
@@ -166,14 +171,13 @@ class CameraPreview implements SurfaceHolder.Callback {
                 mOffset = i;
                 break;
             }
-            */
             
             //Log.d(TAG, "size = " + mSize.width + "*" + mSize.height);
 
-            //if(mSize == null){
+            if(mSize == null){
                 mSize = mSupportList.get(0);
                 mOffset = 0;
-            //}
+            }
             //params.setPreviewSize(mSize.width, mSize.height);
             //mCamera.setParameters(params);     
         }
@@ -412,6 +416,23 @@ class CameraPreview implements SurfaceHolder.Callback {
         mInterval = interval;
     }
     
+    void countShoot(){
+        ((ContShooting)mContext).count();
+
+        if(mInterval == 0 && ((ContShooting)mContext).mMode == 1){
+            //コールバックを再開
+            mCamera.setPreviewCallback(mPreviewCallback);                
+        }
+
+        mNum++;
+        if(mMax!=0){
+            if(mNum >= mMax){
+                stopPreview();
+                ((ContShooting)mContext).setMode(0);
+            }
+        }        
+    }
+    
     void release(){
         if(mCamera != null){
             mCamera.setPreviewCallback(null);
@@ -433,7 +454,6 @@ class CameraPreview implements SurfaceHolder.Callback {
     		return ((Size) t).width - ((Size) s).width;
     	}
     }
-
     
     public class PreviewCallback implements Camera.PreviewCallback {
         private CameraPreview mPreview = null;
@@ -469,7 +489,7 @@ class CameraPreview implements SurfaceHolder.Callback {
                 t2.start();
             }
 
-            ((ContShooting)mContext).count();
+            //((ContShooting)mContext).count();
 
             //convert to "real" preview size. not size setting before.
             Size size = convertPreviewSize(data);
@@ -479,48 +499,8 @@ class CameraPreview implements SurfaceHolder.Callback {
             
             Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 
-            ImageAsyncTask task = new ImageAsyncTask(mContext, data, size);
+            ImageAsyncTask task = new ImageAsyncTask(mContext, CameraPreview.this, data, size);
             task.execute(bmp);
-
-            /*
-            int[] rgb = new int[(width * height)];
-            Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-
-            decodeYUV420SP(rgb, data, width, height);
-            bmp.setPixels(rgb, 0, width, 0, 0, width, height);
-            
-            //回転
-            Matrix matrix = new Matrix();
-            // 回転させる角度を指定
-            matrix.postRotate(90.0f);   
-            Bitmap bmp2 = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, true);
-            bmp = null;
-
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            bmp2.compress(Bitmap.CompressFormat.JPEG, 100, out);
-
-            savedata(out.toByteArray());
-            */
-
-            /*
-            try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-			}
-			*/
-            
-            if(mInterval == 0){
-                //コールバックを再開
-                camera.setPreviewCallback(mPreviewCallback);                
-            }
-
-            mNum++;
-            if(mMax!=0){
-                if(mNum >= mMax){
-                    mPreview.stopPreview();
-                    ((ContShooting)mContext).setMode(0);
-                }
-            }
        }
         
         private Size convertPreviewSize(byte[] data){
@@ -537,122 +517,6 @@ class CameraPreview implements SurfaceHolder.Callback {
                 }
             }
             return null;
-        }
-        
-        public void savedata(byte[] data){
-        	if(mFile == null){
-        		mFile = new File(Environment.getExternalStorageDirectory(), "/ContShooting");
-        	}
-
-            FileOutputStream fos = null;
-            File savefile = null;
-            String datastr = getCurrentDate();
-            try{
-                if(mFile.exists() == false){
-                    mFile.mkdir();
-                }
-                savefile = new File(mFile.getPath(), datastr + ".jpg");
-                fos = new FileOutputStream(savefile);
-                fos.write(data);
-                fos.flush();
-                fos.close();
-            }catch(IOException e){
-                Log.e(TAG, "IOException in savedata");
-                if(fos != null){
-                    try {
-                        fos.close();
-                    } catch (IOException e1) {
-                        //do nothing
-                    }
-                }
-                return;
-            }
-
-            //ギャラリーへの登録
-			ContentValues values = new ContentValues();
-
-			values.put(Images.Media.MIME_TYPE, "image/jpeg");
-			values.put(Images.Media.DATA, savefile.getAbsolutePath());
-			values.put(Images.Media.SIZE, savefile.length());
-			//values.put(Images.Media.TITLE,strFile);
-			//values.put(Images.Media.DISPLAY_NAME,strFile);
-			values.put(Images.Media.DATE_ADDED, datastr);
-			values.put(Images.Media.DATE_TAKEN, datastr);
-			values.put(Images.Media.DATE_MODIFIED, datastr);
-			//values.put(Images.Media.DESCRIPTION,"");
-			//values.put(Images.Media.LATITUDE,0.0);
-			//values.put(Images.Media.LONGITUDE,0.0);
-			//values.put(Images.Media.ORIENTATION,"");
-			((ContShooting)mContext).saveGallery(values);
-        } 
-        
-        // YUV420 to BMP 
-        public void decodeYUV420SP(int[] rgb, byte[] yuv420sp, int width, int height) { 
-            final int frameSize = width * height; 
-
-            for (int j = 0, yp = 0; j < height; j++) { 
-                int uvp = frameSize + (j >> 1) * width, u = 0, v = 0; 
-                for (int i = 0; i < width; i++, yp++) { 
-                    int y = (0xff & ((int) yuv420sp[yp])) - 16; 
-                    if (y < 0) y = 0; 
-                    if ((i & 1) == 0) { 
-                            v = (0xff & yuv420sp[uvp++]) - 128; 
-                            u = (0xff & yuv420sp[uvp++]) - 128; 
-                    } 
-
-                    int y1192 = 1192 * y; 
-                    int r = (y1192 + 1634 * v); 
-                    int g = (y1192 - 833 * v - 400 * u); 
-                    int b = (y1192 + 2066 * u); 
-
-                    if (r < 0) r = 0; else if (r > 262143) r = 262143; 
-                    if (g < 0) g = 0; else if (g > 262143) g = 262143; 
-                    if (b < 0) b = 0; else if (b > 262143) b = 262143; 
-
-                    rgb[yp] = 0xff000000 | ((r << 6) & 0xff0000) | ((g >> 2) & 0xff00) | ((b >> 10) & 0xff); 
-                } 
-            }
-        }
-        
-        String getCurrentDate(){
-            Calendar cal1 = Calendar.getInstance();
-            int year = cal1.get(Calendar.YEAR);
-            int mon = cal1.get(Calendar.MONTH) + 1;
-            int d = cal1.get(Calendar.DATE);
-            int h = cal1.get(Calendar.HOUR_OF_DAY);
-            int min = cal1.get(Calendar.MINUTE);
-            int sec = cal1.get(Calendar.SECOND);
-            int msec = cal1.get(Calendar.MILLISECOND);
-            
-            String month = Integer.toString(mon);
-            if(month.length() == 1){
-                month = "0" + month;
-            }
-            String day = Integer.toString(d);
-            if(day.length() == 1){
-                day = "0" + day;
-            }
-            String hour = Integer.toString(h);
-            if(hour.length() == 1){
-                hour = "0" + hour;
-            }
-            String minute = Integer.toString(min); 
-            if(minute.length() == 1){
-                minute = "0" + minute;
-            }
-            String second = Integer.toString(sec);
-            if(second.length() == 1){
-                second = "0" + second;
-            }
-            String millisecond = Integer.toString(msec);
-            if(millisecond.length() == 1){
-                millisecond = "00" + millisecond;
-            }
-            else if(millisecond.length() == 2){
-                millisecond = "0" + millisecond;
-            }            
-
-            return Integer.toString(year) + month + day + hour + minute + second + millisecond;
         }
     }
 }

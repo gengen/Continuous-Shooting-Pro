@@ -17,18 +17,24 @@ import android.provider.MediaStore.Images;
 import android.util.Log;
 
 public class ImageAsyncTask extends AsyncTask<Bitmap, Void, Bitmap> {
+    public static final String TAG = "ContShooting";
+
     Context mContext = null;
+    CameraPreview mCameraPreview;
     byte[] mData;
     Size mSize;
     
-    ImageAsyncTask(Context context, byte[] data, Size size){
+    ImageAsyncTask(Context context, CameraPreview camera, byte[] data, Size size){
         mContext = context;
         mData = data;
+        mCameraPreview = camera;
         mSize = size;
     }
 
     @Override
     protected Bitmap doInBackground(Bitmap... bmp) {
+        Log.d(TAG, "doInBackground");
+        
         Bitmap retBmp;
         
         final int width = mSize.width;
@@ -46,11 +52,6 @@ public class ImageAsyncTask extends AsyncTask<Bitmap, Void, Bitmap> {
         bmp[0].recycle();
         bmp[0] = null;
         
-        try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-		}
-        
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         retBmp.compress(Bitmap.CompressFormat.JPEG, 100, out);
 
@@ -63,6 +64,8 @@ public class ImageAsyncTask extends AsyncTask<Bitmap, Void, Bitmap> {
 
     @Override
     protected void onPostExecute(Bitmap bmp) {
+        Log.d(TAG, "onPostExecute");
+        mCameraPreview.countShoot();
     }
     
     // YUV420 to BMP 

@@ -54,4 +54,14 @@
     
    	<string name="display_hide_title">Hidden mode setting</string>
 	<string name="display_hide_summary">Set hidden mode when launching app</string>
+	
+	<string name="resolution_title">High resolution mode</string>
+	<string name="resolution_summary">Set high resolution</string>
+
+	<string name="ok">OK</string>
+	<string name="ng">Cancel</string>
+	<string name="pref_confirm_title">Confirm</string>
+	<string name="pref_confirm_message">
+	    Shooting speed falls because picture size becomes large. Is this OK?
+	</string>
 </resources>

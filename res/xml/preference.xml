@@ -32,6 +32,12 @@
 			>
 		</ListPreference>
 
+        <CheckBoxPreference 
+        	android:key="high_resolution"
+            android:title="@string/resolution_title"
+        	android:summary="@string/resolution_summary"
+        	>
+        </CheckBoxPreference>
    	</PreferenceCategory>
   
       <PreferenceCategory android:title="@string/category_effect">
