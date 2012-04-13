@@ -32,7 +32,21 @@
        android:layout_height="fill_parent"
        >
        </SurfaceView>
-       </FrameLayout>       
+       </FrameLayout>
+       
+       <FrameLayout 
+       android:id="@+id/zoom_layout"
+       android:layout_width="100sp"
+       android:layout_height="wrap_content"
+       android:layout_gravity="center_horizontal|bottom"
+       >
+	       　　<SeekBar android:id="@+id/zoom_seek"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:max="100"
+			android:progress="0"
+		/>
+       </FrameLayout>
 </FrameLayout>
 
 <LinearLayout
@@ -60,15 +74,18 @@
     	   android:layout_width="50sp"
     	   android:scaleType="fitXY"
        />
+	       
+       <Button 
+           android:id="@+id/zoom_in"
+	       android:layout_height="50sp"
+    	   android:layout_width="50sp"
+       />
        
-	   <LinearLayout
-	    android:id="@+id/adspace"
-    	android:layout_width="0pt"
-    	android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-       >
-       </LinearLayout>
+       <Button 
+           android:id="@+id/zoom_out"
+	       android:layout_height="50sp"
+    	   android:layout_width="50sp"
+       />
        
 	   <TextView
     	android:layout_width="0pt"

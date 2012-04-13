@@ -28,11 +28,14 @@ import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 
 public class ContShooting extends Activity {
     private static final String TAG = "ContShooting";
@@ -178,10 +181,9 @@ public class ContShooting extends Activity {
             setToHidden();
         }
 
-		/*
-        ImageButton plus = (ImageButton)findViewById(R.id.plus);
+		//TODO:ÉYÅ[ÉÄ
+        Button plus = (Button)findViewById(R.id.zoom_out);
         plus.setOnClickListener(new OnClickListener(){
-			@Override
 			public void onClick(View v) {
 				if(mPreview != null){
 					mPreview.setZoom(true);
@@ -189,16 +191,31 @@ public class ContShooting extends Activity {
 			}
         });
         
-        ImageButton minus = (ImageButton)findViewById(R.id.minus);
+        Button minus = (Button)findViewById(R.id.zoom_in);
         minus.setOnClickListener(new OnClickListener(){
-			@Override
 			public void onClick(View v) {
 				if(mPreview != null){
 					mPreview.setZoom(false);
 				}
 			}
         });
-        */
+        
+        //seekbar
+        SeekBar seekBar = (SeekBar)findViewById(R.id.zoom_seek);
+        seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener(){
+
+            public void onProgressChanged(SeekBar bar, int progress, boolean fromuser) {
+                // TODO Ç±Ç±Ç©ÇÁÅ`
+                Log.d(TAG, "progress = " + progress);
+            }
+
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+            
+        });
     }
     
     public void setToNormal(){

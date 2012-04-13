@@ -92,8 +92,9 @@ class CameraPreview implements SurfaceHolder.Callback {
         mWhite = white;
         //mPicIdx = size;
         mSizeStr = size;
-        mWidth = width;
-        mHeight = height;
+        //portraitÇ…Ç∑ÇÈÇΩÇﬂÅAwidthÇ∆heightÇãtÇ…Ç∑ÇÈ
+        mWidth = height;
+        mHeight = width;
     }
     
     public void surfaceCreated(SurfaceHolder holder) {
@@ -276,7 +277,11 @@ class CameraPreview implements SurfaceHolder.Callback {
         }
 
         try{
-            mSize = mSupportList.get(mOffset + mPicIdx);        
+            int index = 0;
+            if(!ContShootingPreference.isHighResolution(mContext)){
+                index = mOffset + mPicIdx;
+            }
+            mSize = mSupportList.get(index);
             param.setPreviewSize(mSize.width, mSize.height);
             mCamera.setParameters(param);
         }catch(Exception e){
@@ -320,7 +325,6 @@ class CameraPreview implements SurfaceHolder.Callback {
     }
     
     public void setZoom(boolean flag){
-    	/*
     	if(mCamera == null){
     		return;
     	}
@@ -337,7 +341,6 @@ class CameraPreview implements SurfaceHolder.Callback {
         	Log.d("camera", "list " + i + " = " + ZoomRatislist.get(i));
         }
 
-    	
         int cur = params.getZoom();
         int max = params.getMaxZoom();
 
@@ -346,19 +349,18 @@ class CameraPreview implements SurfaceHolder.Callback {
         
         if(flag){
         	if(cur < max){
-        		//mCamera.startSmoothZoom(++cur);
-        		params.setZoom(++cur);
-        		mCamera.setParameters(params);
+        		mCamera.startSmoothZoom(++cur);
+        		//params.setZoom(++cur);
+        		//mCamera.setParameters(params);
         	}
         }
         else{
         	if(cur > 0){
-        		//mCamera.startSmoothZoom(--cur);
-        		params.setZoom(--cur);
-        		mCamera.setParameters(params);
+        	    mCamera.startSmoothZoom(--cur);
+        		//params.setZoom(--cur);
+        		//mCamera.setParameters(params);
         	}
         }
-        */
     }
     
     List<String> getEffectList(){

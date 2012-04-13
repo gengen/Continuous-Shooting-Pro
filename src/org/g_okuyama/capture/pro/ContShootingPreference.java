@@ -12,6 +12,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.util.Log;
@@ -29,6 +30,9 @@ public class ContShootingPreference extends PreferenceActivity implements OnPref
     static final int SHOOT_NUM = 5;
     static final int INTERVAL = 6;
     static String[] sSizeList = null;
+    
+    private CheckBoxPreference mResolutionPreference;
+    private ListPreference mSizePreference;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,29 +87,34 @@ public class ContShootingPreference extends PreferenceActivity implements OnPref
         }
         
         //画像サイズ
-        ListPreference sizePref = (ListPreference)this.findPreference("picture_size");
+        mSizePreference = (ListPreference)this.findPreference("picture_size");
         String size = getCurrentPictureSize(this);
         if(sSizeList != null){
-            sizePref.setOnPreferenceChangeListener(this);
+            mSizePreference.setOnPreferenceChangeListener(this);
             if(!size.equals("0")){
-                sizePref.setSummary(size);
+                mSizePreference.setSummary(size);
             }
             else{
-                sizePref.setSummary(getString(R.string.picture_size_summary));                
+                mSizePreference.setSummary(getString(R.string.picture_size_summary));                
             }
-            sizePref.setEntries(sSizeList);
+            mSizePreference.setEntries(sSizeList);
 
             /*
-            String[] valueList = new String[sSizeList.length];
-            for(int i=0; i<sSizeList.length; i++){
-                valueList[i] = String.valueOf(i);
-            }
-            Log.d(TAG, "size = " + valueList);
-            */
-            sizePref.setEntryValues(sSizeList);
+                String[] valueList = new String[sSizeList.length];
+                for(int i=0; i<sSizeList.length; i++){
+                    valueList[i] = String.valueOf(i);
+                }
+                Log.d(TAG, "size = " + valueList);
+             */
+            mSizePreference.setEntryValues(sSizeList);
         }
         else{
-            sizePref.setEnabled(false);
+            mSizePreference.setEnabled(false);
+        }
+
+        if(isHighResolution(this)){
+            //高解像度モード時はグレーアウトする
+            mSizePreference.setEnabled(false);            
         }
         
         //連写枚数
@@ -131,28 +140,7 @@ public class ContShootingPreference extends PreferenceActivity implements OnPref
         }
         
         //高解像度モード
-        CheckBoxPreference resolutionPref = (CheckBoxPreference)this.findPreference("high_resolution");
-        resolutionPref.setOnPreferenceClickListener(new OnPreferenceClickListener(){
-            public boolean onPreferenceClick(Preference preference) {
-                new AlertDialog.Builder(ContShootingPreference.this)
-                .setTitle(R.string.pref_confirm_title)
-                .setMessage(R.string.pref_confirm_message)
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        //何もしない
-                    }
-                })
-                .setNegativeButton(R.string.ng, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        //何もしない
-                        return;
-                    }
-                })
-                .show();
-                return false;
-            }
-        });
-        
+        mResolutionPreference = (CheckBoxPreference)this.findPreference("high_resolution");
 }
     
     public static String getCurrentEffect(Context c){
@@ -205,13 +193,14 @@ public class ContShootingPreference extends PreferenceActivity implements OnPref
                 .getBoolean("display_hide", false);
     }
     
-    public static boolean isHighMode(Context c){
+    public static boolean isHighResolution(Context c){
         return PreferenceManager.getDefaultSharedPreferences(c)
                 .getBoolean("high_resolution", false);
     }
 
 	public boolean onPreferenceChange(Preference pref, Object newValue) {
 		final CharSequence value = (CharSequence)newValue;
+		Log.d(TAG, "change = " + (String)value);
 		if(value == null){
 			return false;
 		}
@@ -264,5 +253,39 @@ public class ContShootingPreference extends PreferenceActivity implements OnPref
         }
 		
 		return true;
+	}
+	
+	public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+	    final String key = preference.getKey();
+
+	    if (preference == mResolutionPreference) {
+	        if (mResolutionPreference.isChecked()) {
+                mResolutionPreference.setChecked(false);
+	            
+                //高解像度モードにするかの確認
+                new AlertDialog.Builder(ContShootingPreference.this)
+                .setTitle(R.string.pref_confirm_title)
+                .setMessage(R.string.pref_confirm_message)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        mResolutionPreference.setChecked(true);
+                        //高解像度モード時はサイズ設定ができないようにする
+                        mSizePreference.setEnabled(false);
+                    }
+                })
+                .setNegativeButton(R.string.ng, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        //何もしない
+                    }
+                })
+                .show();
+	        } else {
+                mSizePreference.setEnabled(true);
+	        }
+	    } else {
+	        return super.onPreferenceTreeClick(preferenceScreen, preference);
+	    }
+
+	    return true;
 	}
 }
