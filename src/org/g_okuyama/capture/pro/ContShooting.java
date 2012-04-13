@@ -67,6 +67,7 @@ public class ContShooting extends Activity {
     private ImageButton mButton = null;
     private ImageButton mMaskButton = null;
     private ImageButton mFocusButton = null;
+    private SeekBar mSeekBar = null;
     private String mNum = null;
     private ContentResolver mResolver;
     
@@ -139,16 +140,18 @@ public class ContShooting extends Activity {
 					if(mMode == 0){
 						mPreview.resumePreview();
 						mMode = 1;
-                        //フォーカスボタンとマスクボタンを見えなくする
+                        //フォーカスボタン、マスクボタン、ズームボタンを見えなくする
                         mFocusButton.setVisibility(View.INVISIBLE);
                         mMaskButton.setVisibility(View.INVISIBLE);
+                        mSeekBar.setVisibility(View.INVISIBLE);
 					}
 					else{
 						mPreview.stopPreview();
 						mMode = 0;
-                        //フォーカスボタンとマスクボタンを見えるようにする
+                        //フォーカスボタン、マスクボタン、ズームボタンを見えるようにする
                         mFocusButton.setVisibility(View.VISIBLE);
                         mMaskButton.setVisibility(View.VISIBLE);
+                        mSeekBar.setVisibility(View.VISIBLE);
 					}
 				}
 			}
@@ -180,33 +183,16 @@ public class ContShooting extends Activity {
         if(ContShootingPreference.isHidden(this)){
             setToHidden();
         }
-
-		//TODO:ズーム
-        Button plus = (Button)findViewById(R.id.zoom_out);
-        plus.setOnClickListener(new OnClickListener(){
-			public void onClick(View v) {
-				if(mPreview != null){
-					mPreview.setZoom(true);
-				}
-			}
-        });
-        
-        Button minus = (Button)findViewById(R.id.zoom_in);
-        minus.setOnClickListener(new OnClickListener(){
-			public void onClick(View v) {
-				if(mPreview != null){
-					mPreview.setZoom(false);
-				}
-			}
-        });
         
         //seekbar
-        SeekBar seekBar = (SeekBar)findViewById(R.id.zoom_seek);
-        seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener(){
+        mSeekBar = (SeekBar)findViewById(R.id.zoom_seek);
+        mSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener(){
 
             public void onProgressChanged(SeekBar bar, int progress, boolean fromuser) {
-                // TODO ここから～
-                Log.d(TAG, "progress = " + progress);
+                //Log.d(TAG, "progress = " + progress);
+				if(mPreview != null){
+	                mPreview.setZoom(progress);
+				}
             }
 
             public void onStartTrackingTouch(SeekBar seekBar) {

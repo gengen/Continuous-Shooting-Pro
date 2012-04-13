@@ -74,6 +74,8 @@ class CameraPreview implements SurfaceHolder.Callback {
 	private int mMax = 0;
 	//åªç›ÇÃéBâeêî
 	private int mNum = 0;
+	//ç≈ëÂÉYÅ[ÉÄ
+	private int mZoomMax = 0;
 	
 	//òAé ä‘äu
 	private int mInterval = 0;
@@ -324,7 +326,21 @@ class CameraPreview implements SurfaceHolder.Callback {
     	}
     }
     
-    public void setZoom(boolean flag){
+    public void setZoom(int progress){
+    	if(mCamera == null){
+    		return;
+    	}
+
+    	if(mZoomMax == 0){
+    		Camera.Parameters params = mCamera.getParameters();
+    		mZoomMax = params.getMaxZoom();
+    	}
+    	
+    	int value = mZoomMax * progress / 100;
+    	Log.d(TAG, "value = " + value);
+		mCamera.startSmoothZoom(value);
+
+		/*
     	if(mCamera == null){
     		return;
     	}
@@ -361,6 +377,7 @@ class CameraPreview implements SurfaceHolder.Callback {
         		//mCamera.setParameters(params);
         	}
         }
+        */
     }
     
     List<String> getEffectList(){
