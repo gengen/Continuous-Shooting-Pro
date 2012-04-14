@@ -36,17 +36,36 @@
        
        <FrameLayout 
        android:id="@+id/zoom_layout"
-       android:layout_width="150sp"
+       android:layout_width="170sp"
        android:layout_height="wrap_content"
        android:layout_gravity="center_horizontal|bottom"
        android:paddingBottom="10sp"
        >
-       　　<SeekBar android:id="@+id/zoom_seek"
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
-			android:max="100"
-			android:progress="0"
-			/>
+       		<LinearLayout
+       		    android:layout_width="fill_parent"
+       		    android:layout_height="fill_parent"
+       		    android:orientation="horizontal"
+       		>
+		       	<ImageView
+		       	    android:layout_width="wrap_content"
+	    	   	    android:layout_height="wrap_content"
+	       	    	android:src="@drawable/zoom_out"
+				/>
+	       		<SeekBar
+       				android:id="@+id/zoom_seek"
+					android:layout_width="0pt"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:max="100"
+					android:progress="0"
+					android:layout_gravity="center_vertical"
+				/>
+           		<ImageView
+	       	    	android:layout_width="wrap_content"
+	       	    	android:layout_height="wrap_content"
+	       	    	android:src="@drawable/zoom_in"
+				/>
+       　　</LinearLayout>
        </FrameLayout>
 </FrameLayout>
 
