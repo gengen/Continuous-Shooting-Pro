@@ -33,8 +33,6 @@ public class ImageAsyncTask extends AsyncTask<Bitmap, Void, Bitmap> {
 
     @Override
     protected Bitmap doInBackground(Bitmap... bmp) {
-        Log.d(TAG, "doInBackground");
-        
         Bitmap retBmp;
         
         final int width = mSize.width;
@@ -64,7 +62,6 @@ public class ImageAsyncTask extends AsyncTask<Bitmap, Void, Bitmap> {
 
     @Override
     protected void onPostExecute(Bitmap bmp) {
-        Log.d(TAG, "onPostExecute");
         mCameraPreview.countShoot();
     }
     

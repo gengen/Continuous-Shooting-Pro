@@ -436,7 +436,7 @@ class CameraPreview implements SurfaceHolder.Callback {
     }
     
     void countShoot(){
-        ((ContShooting)mContext).count();
+    	//((ContShooting)mContext).count();
 
         if(mInterval == 0 && ((ContShooting)mContext).mMode == 1){
             //コールバックを再開
@@ -508,8 +508,6 @@ class CameraPreview implements SurfaceHolder.Callback {
                 t2.start();
             }
 
-            //((ContShooting)mContext).count();
-
             //convert to "real" preview size. not size setting before.
             Size size = convertPreviewSize(data);
 
@@ -518,6 +516,7 @@ class CameraPreview implements SurfaceHolder.Callback {
             
             Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 
+            ((ContShooting)mContext).count();
             ImageAsyncTask task = new ImageAsyncTask(mContext, CameraPreview.this, data, size);
             task.execute(bmp);
        }
