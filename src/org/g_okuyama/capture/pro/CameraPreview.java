@@ -74,6 +74,11 @@ class CameraPreview implements SurfaceHolder.Callback {
 	private int mMax = 0;
 	//現在の撮影数
 	private int mNum = 0;
+	
+	//ズームサポート
+	boolean mZoom = false;
+	//スムースズームサポート
+	boolean mSmoothZoom = false;
 	//最大ズーム
 	private int mZoomMax = 0;
 	
@@ -89,7 +94,9 @@ class CameraPreview implements SurfaceHolder.Callback {
 	}
 	
     public void setField(String effect, String scene, String white, String size, int width, int height){
-        mEffect = effect;
+    	Log.d(TAG, "enter CameraPreview#setField");
+
+    	mEffect = effect;
         mScene = scene;
         mWhite = white;
         //mPicIdx = size;
@@ -139,6 +146,24 @@ class CameraPreview implements SurfaceHolder.Callback {
             mCamera.release();
             mCamera = null;
         }
+        
+        //ズームをサポートしていない場合はViewを見えなくする
+        Camera.Parameters params = mCamera.getParameters();
+		if(params.isSmoothZoomSupported()){
+			Log.d(TAG, "this terminal supports smooth zoom.");
+			mSmoothZoom = true;
+		}
+		else{
+			if(params.isZoomSupported()){
+				Log.d(TAG, "this terminal supports zoom.");
+				mZoom = true;
+			}
+			else{
+				if(mContext != null){
+					((ContShooting)mContext).invisibleZoom();
+				}				
+			}
+		}
     }
     
     private void createSupportList(){
@@ -192,7 +217,7 @@ class CameraPreview implements SurfaceHolder.Callback {
     }
 
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
-        //Log.d(TAG, "enter CameraPreview#surfaceChanged");
+    	//Log.d(TAG, "enter CameraPreview#surfaceChanged");
         
         //Cameraがopen()できなかったとき用
         if(mCamera == null){
@@ -291,7 +316,7 @@ class CameraPreview implements SurfaceHolder.Callback {
         }
     }
     
-    public void resumePreview(){
+    public void resumeShooting(){
     	if(mPreviewCallback != null){
     		if(mCamera != null){
     			mCamera.startPreview();
@@ -303,7 +328,7 @@ class CameraPreview implements SurfaceHolder.Callback {
     	((ContShooting)mContext).displayStop();
     }
     
-    public void stopPreview(){
+    public void stopShooting(){
     	//Log.d(TAG, "enter CameraPreview#stopPreview");
 
     	mCamera.stopPreview();
@@ -313,6 +338,18 @@ class CameraPreview implements SurfaceHolder.Callback {
         mNum = 0;
 		//プレビューだけ開始する(画像保存はしない(setPreviewCallbackを呼ばない))
         mCamera.startPreview();
+    }
+    
+    public void startPreview(){
+		if(mCamera != null){
+    		mCamera.startPreview();
+    	}
+    }
+    
+    public void stopPreview(){
+    	if(mCamera != null){
+    		mCamera.stopPreview();
+    	}    	
     }
 
     void doAutoFocus(){
@@ -326,58 +363,40 @@ class CameraPreview implements SurfaceHolder.Callback {
     	}
     }
     
+    public boolean isZoomSupported(){
+    	if(mSmoothZoom || mZoom){
+    		return true;
+    	}
+    	return false;
+    }
+    
     public void setZoom(int progress){
     	if(mCamera == null){
     		return;
     	}
 
+		Camera.Parameters params = mCamera.getParameters();
     	if(mZoomMax == 0){
-    		Camera.Parameters params = mCamera.getParameters();
     		mZoomMax = params.getMaxZoom();
+    		Log.d(TAG, "zoom max = " + mZoomMax);
     	}
     	
-    	int value = mZoomMax * progress / 100;
-    	Log.d(TAG, "value = " + value);
-		mCamera.startSmoothZoom(value);
-
-		/*
-    	if(mCamera == null){
-    		return;
-    	}
+		int value = mZoomMax * progress / 100;
+		Log.d(TAG, "value = " + value);
     	
-        Camera.Parameters params = mCamera.getParameters();
-
-        //if(params.isSmoothZoomSupported() == false){
-        //Log.d(TAG, "Zoom is not supported");
-        //	return;
-        //}
-        
-        List ZoomRatislist = params.getZoomRatios ();
-        for (int i=0;i < ZoomRatislist.size();i++) {
-        	Log.d("camera", "list " + i + " = " + ZoomRatislist.get(i));
-        }
-
-        int cur = params.getZoom();
-        int max = params.getMaxZoom();
-
-        Log.d(TAG, "currentZoom: " + cur);
-        Log.d(TAG, "maxZoom: " + max);
-        
-        if(flag){
-        	if(cur < max){
-        		mCamera.startSmoothZoom(++cur);
-        		//params.setZoom(++cur);
-        		//mCamera.setParameters(params);
-        	}
-        }
-        else{
-        	if(cur > 0){
-        	    mCamera.startSmoothZoom(--cur);
-        		//params.setZoom(--cur);
-        		//mCamera.setParameters(params);
-        	}
-        }
-        */
+    	if(mSmoothZoom){
+    		try{
+    			mCamera.startSmoothZoom(value);
+    		}catch(Exception e){
+    			//何もしない
+    		}
+    	}
+    	else if(mZoom){
+    		mCamera.stopPreview();
+    		params.setZoom(value);
+    		mCamera.setParameters(params);
+    		mCamera.startPreview();
+    	}
     }
     
     List<String> getEffectList(){
@@ -446,7 +465,7 @@ class CameraPreview implements SurfaceHolder.Callback {
         mNum++;
         if(mMax!=0){
             if(mNum >= mMax){
-                stopPreview();
+                stopShooting();
                 ((ContShooting)mContext).setMode(0);
             }
         }        

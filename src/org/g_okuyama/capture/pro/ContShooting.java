@@ -138,20 +138,26 @@ public class ContShooting extends Activity {
 			public void onClick(View v) {
 				if(mPreview != null){
 					if(mMode == 0){
-						mPreview.resumePreview();
+						mPreview.resumeShooting();
 						mMode = 1;
                         //フォーカスボタン、マスクボタン、ズームボタンを見えなくする
                         mFocusButton.setVisibility(View.INVISIBLE);
                         mMaskButton.setVisibility(View.INVISIBLE);
-                        mSeekBar.setVisibility(View.INVISIBLE);
+                        if(mPreview.isZoomSupported()){
+                        	FrameLayout zoom = (FrameLayout)findViewById(R.id.zoom_layout);
+                        	zoom.setVisibility(View.INVISIBLE);
+                        }
 					}
 					else{
-						mPreview.stopPreview();
+						mPreview.stopShooting();
 						mMode = 0;
                         //フォーカスボタン、マスクボタン、ズームボタンを見えるようにする
                         mFocusButton.setVisibility(View.VISIBLE);
                         mMaskButton.setVisibility(View.VISIBLE);
-                        mSeekBar.setVisibility(View.VISIBLE);
+                        if(mPreview.isZoomSupported()){
+                        	FrameLayout zoom = (FrameLayout)findViewById(R.id.zoom_layout);
+                        	zoom.setVisibility(View.VISIBLE);
+                        }
 					}
 				}
 			}
@@ -205,6 +211,10 @@ public class ContShooting extends Activity {
     }
     
     public void setToNormal(){
+    	if(mPreview != null){
+    		mPreview.stopPreview();
+    	}
+
         FrameLayout layout = (FrameLayout)findViewById(R.id.linear);
         layout.removeView(mWebView);
         layout.setLayoutParams(new FrameLayout.LayoutParams(
@@ -214,12 +224,6 @@ public class ContShooting extends Activity {
         mWebView.destroy();
         mWebView = null;
 
-        /*
-        SurfaceView sv = (SurfaceView)findViewById(R.id.camera);
-        sv.setLayoutParams(new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.FILL_PARENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT));
-                */
         FrameLayout frame = (FrameLayout)findViewById(R.id.camera_parent);
         frame.setLayoutParams(new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.FILL_PARENT,
@@ -228,9 +232,17 @@ public class ContShooting extends Activity {
         displayNormalMode();
         mMaskFlag = false;
         setTitle(R.string.app_name);
+
+        if(mPreview != null){
+    		mPreview.startPreview();
+    	}
     }
     
     public void setToHidden(){
+    	if(mPreview != null){
+    		mPreview.stopPreview();
+    	}
+
         mWebView = new WebView(ContShooting.this);
         mWebView.setWebViewClient(new WebViewClient());
         mWebView.getSettings().setJavaScriptEnabled(true);
@@ -250,21 +262,18 @@ public class ContShooting extends Activity {
             mWebView.loadUrl(URL_OTHER);
         }
 
-        /*
-        SurfaceView sv = (SurfaceView)findViewById(R.id.camera);
-        int hide_width = mWidth / 6;
-        int hide_height = hide_width * (4/3);
-        sv.setLayoutParams(new FrameLayout.LayoutParams(hide_width, hide_height));
-        */        
-
-        FrameLayout frame = (FrameLayout)findViewById(R.id.camera_parent);
-        int hide_width = mWidth / 6;
+    	FrameLayout frame = (FrameLayout)findViewById(R.id.camera_parent);
+        int hide_width = mWidth / 5;
         int hide_height = hide_width * (4/3);
         frame.setLayoutParams(new FrameLayout.LayoutParams(hide_width, hide_height, Gravity.BOTTOM));
 
-        displayHideMode();
+    	displayHideMode();
         mMaskFlag = true;
         setTitle(R.string.sc_hidden);
+
+        if(mPreview != null){
+    		mPreview.startPreview();
+    	}
     }
     
     public void onStart(){
@@ -465,6 +474,11 @@ public class ContShooting extends Activity {
     
     void displayNormalMode(){
         mMaskButton.setImageResource(R.drawable.scale_down);
+    }
+
+    void invisibleZoom(){
+        FrameLayout zoom = (FrameLayout)findViewById(R.id.zoom_layout);
+        zoom.setVisibility(View.INVISIBLE);
     }
     
     public void saveGallery(ContentValues values){
