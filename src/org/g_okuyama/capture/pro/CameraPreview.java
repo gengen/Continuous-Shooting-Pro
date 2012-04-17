@@ -81,6 +81,9 @@ class CameraPreview implements SurfaceHolder.Callback {
 	boolean mSmoothZoom = false;
 	//最大ズーム
 	private int mZoomMax = 0;
+	//ズーム状態
+	boolean mZoomStopped = true;
+	private int mZoomIdx = 0;
 	
 	//連写間隔
 	private int mInterval = 0;
@@ -152,6 +155,24 @@ class CameraPreview implements SurfaceHolder.Callback {
 		if(params.isSmoothZoomSupported()){
 			Log.d(TAG, "this terminal supports smooth zoom.");
 			mSmoothZoom = true;
+			mCamera.setZoomChangeListener(new Camera.OnZoomChangeListener(){
+                public void onZoomChange(int zoomValue, boolean stopped, Camera camera) {
+                    Log.d(TAG, "onZoomChange: value = " + zoomValue + " stopped = " + stopped);
+                    mZoomStopped = stopped;
+                    
+                    if((zoomValue != mZoomIdx) && stopped){
+                        //指定したズーム処理が追いついていない場合(すばやくスライドさせた場合など)
+                        if(mCamera != null){
+                            Log.d(TAG, "onZoomChange->stopped");
+                            try{
+                                mCamera.startSmoothZoom(mZoomIdx);
+                            }catch(Exception e){
+                                //何もしない
+                            }
+                        }
+                    }
+                }
+            });
 		}
 		else{
 			if(params.isZoomSupported()){
@@ -280,6 +301,13 @@ class CameraPreview implements SurfaceHolder.Callback {
     
     private void setAllParameters(){
         Camera.Parameters param = mCamera.getParameters();
+        
+        //ズームサポートしているがmax_zoomが0の場合は見えなくする
+        if(mZoom || mSmoothZoom){
+            if(param.getMaxZoom() == 0){
+                ((ContShooting)mContext).invisibleZoom();
+            }
+        }
 
         //一度に複数のパラメータを設定すると落ちる端末があるため、1つずつ設定する
         try{
@@ -364,8 +392,11 @@ class CameraPreview implements SurfaceHolder.Callback {
     }
     
     public boolean isZoomSupported(){
-    	if(mSmoothZoom || mZoom){
-    		return true;
+        if(mSmoothZoom || mZoom){
+            Camera.Parameters param = mCamera.getParameters();
+            if(param.getMaxZoom() != 0){
+                return true;
+            }
     	}
     	return false;
     }
@@ -381,21 +412,23 @@ class CameraPreview implements SurfaceHolder.Callback {
     		Log.d(TAG, "zoom max = " + mZoomMax);
     	}
     	
-		int value = mZoomMax * progress / 100;
-		Log.d(TAG, "value = " + value);
+		mZoomIdx = mZoomMax * progress / 100;
+		Log.d(TAG, "value = " + mZoomIdx);
     	
     	if(mSmoothZoom){
     		try{
-    			mCamera.startSmoothZoom(value);
+    		    if(mZoomStopped){
+    		        mCamera.startSmoothZoom(mZoomIdx);
+    		    }
     		}catch(Exception e){
     			//何もしない
     		}
     	}
     	else if(mZoom){
-    		mCamera.stopPreview();
-    		params.setZoom(value);
+    		//mCamera.stopPreview();
+    		params.setZoom(mZoomIdx);
     		mCamera.setParameters(params);
-    		mCamera.startPreview();
+    		//mCamera.startPreview();
     	}
     }
     

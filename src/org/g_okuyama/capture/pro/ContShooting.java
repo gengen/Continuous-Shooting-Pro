@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
@@ -84,6 +85,7 @@ public class ContShooting extends Activity {
     public void onCreate(Bundle savedInstanceState) {
     	//Log.d(TAG, "enter ContShooting#onCreate");
         super.onCreate(savedInstanceState);
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.main);
         
         mNum = getString(R.string.sc_number);
@@ -101,8 +103,6 @@ public class ContShooting extends Activity {
         Display disp = wm.getDefaultDisplay();
         mWidth = disp.getWidth();
         mHeight = disp.getHeight();
-        
-        //requestWindowFeature(Window.FEATURE_NO_TITLE);
         
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         SurfaceView sv = (SurfaceView)findViewById(R.id.camera);
@@ -263,7 +263,7 @@ public class ContShooting extends Activity {
         }
 
     	FrameLayout frame = (FrameLayout)findViewById(R.id.camera_parent);
-        int hide_width = mWidth / 5;
+        int hide_width = mWidth / 4;
         int hide_height = hide_width * (4/3);
         frame.setLayoutParams(new FrameLayout.LayoutParams(hide_width, hide_height, Gravity.BOTTOM));
 
