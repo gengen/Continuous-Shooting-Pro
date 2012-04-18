@@ -53,9 +53,6 @@ public class ContShooting extends Activity {
     static final int RESPONSE_PICTURE_SIZE = 4;
     static final int RESPONSE_SHOOT_NUM = 5;
     static final int RESPONSE_INTERVAL = 6;
-    
-    public static final int HIDDEN_WIDTH = /*64*/96; 
-    public static final int HIDDEN_HEIGHT = /*48*/72;
 
     SurfaceHolder mHolder;
     private int mCount = 0;
@@ -413,6 +410,12 @@ public class ContShooting extends Activity {
             //Log.d(TAG, "size = " + (String[])sizeList.toArray(new String[0]));
             pref_intent.putExtra("size", (String[])sizeList.toArray(new String[0]));
         }
+
+        int offset = 0;
+        if(mPreview != null){
+            offset = mPreview.getPreviewOffset();
+        }
+        pref_intent.putExtra("offset", offset);
         
         startActivityForResult(pref_intent, REQUEST_CODE);
     }

@@ -457,6 +457,10 @@ class CameraPreview implements SurfaceHolder.Callback {
     	return list;
     }
     
+    int getPreviewOffset(){
+        return mOffset;
+    }
+    
     void setColorValue(String value){
     	mSetColor = true;
     	mSetValue = value;

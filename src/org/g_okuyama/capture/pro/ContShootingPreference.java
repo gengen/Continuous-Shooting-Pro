@@ -43,11 +43,13 @@ public class ContShootingPreference extends PreferenceActivity implements OnPref
         String[] effectList = null;
         String[] whiteList = null;
         String[] sceneList = null;
+        int offset = 0;
         if(extras != null){
             effectList = extras.getStringArray("effect");
             sceneList = extras.getStringArray("scene");
             whiteList = extras.getStringArray("white");
             sSizeList = extras.getStringArray("size");
+            offset = extras.getInt("offset");
         }
 
         //色合い
@@ -141,7 +143,10 @@ public class ContShootingPreference extends PreferenceActivity implements OnPref
         
         //高解像度モード
         mResolutionPreference = (CheckBoxPreference)this.findPreference("high_resolution");
-}
+        if(offset == 0){
+            mResolutionPreference.setEnabled(false);
+        }
+    }
     
     public static String getCurrentEffect(Context c){
         return PreferenceManager.getDefaultSharedPreferences(c)
