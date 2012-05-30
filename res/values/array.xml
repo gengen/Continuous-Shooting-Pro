@@ -37,13 +37,13 @@
 <item>10</item>
 </string-array>
 
-<string-array name="hide_entries">
+<string-array name="hidden_entries">
 <item>Big</item>
 <item>Small</item>
 <item>None</item>
 </string-array>
 
-<string-array name="hide_entryvalues">
+<string-array name="hidden_entryvalues">
 <item>1</item>
 <item>2</item>
 <item>3</item>
