@@ -22,6 +22,7 @@ public class ContShootingPreference extends PreferenceActivity implements OnPref
 
     public static final String DEFAULT_SHOOT_NUM = "0";
     public static final String DEFAULT_INTERVAL = "0";
+    public static final String DEFAULT_HIDDEN_SIZE = "0";
     
     static final int COLOR_EFFECT = 1;
     static final int SCENE_MODE = 2;
@@ -29,6 +30,7 @@ public class ContShootingPreference extends PreferenceActivity implements OnPref
     static final int PICTURE_SIZE = 4;
     static final int SHOOT_NUM = 5;
     static final int INTERVAL = 6;
+    static final int HIDDEN_SIZE = 7;
     static String[] sSizeList = null;
     
     private CheckBoxPreference mResolutionPreference;
@@ -141,6 +143,22 @@ public class ContShootingPreference extends PreferenceActivity implements OnPref
             intPref.setSummary(intStr + " " + getString(R.string.str_sec));
         }
         
+        //隠しモードサイズ
+        ListPreference hiddenPref = (ListPreference)this.findPreference("hidden_size");
+        hiddenPref.setOnPreferenceChangeListener(this);
+        String hiddenStr = getCurrentHiddenSize(this);
+        String summaryStr = getString(R.string.hidden_size_summary);
+        if(hiddenStr.equals("1")){
+            summaryStr = getString(R.string.hidden_size_big);
+        }
+        else if(hiddenStr.equals("2")){
+            summaryStr = getString(R.string.hidden_size_small);            
+        }
+        else if(hiddenStr.equals("3")){
+            summaryStr = getString(R.string.hidden_size_none);
+        }
+        hiddenPref.setSummary(summaryStr);
+        
         //高解像度モード
         mResolutionPreference = (CheckBoxPreference)this.findPreference("high_resolution");
         if(offset == 0){
@@ -203,7 +221,12 @@ public class ContShootingPreference extends PreferenceActivity implements OnPref
                 .getBoolean("high_resolution", false);
     }
 
-	public boolean onPreferenceChange(Preference pref, Object newValue) {
+    public static String getCurrentHiddenSize(Context c){
+        return PreferenceManager.getDefaultSharedPreferences(c)
+                .getString("hidden_size", /*default*/DEFAULT_HIDDEN_SIZE);
+    }
+
+    public boolean onPreferenceChange(Preference pref, Object newValue) {
 		final CharSequence value = (CharSequence)newValue;
 		Log.d(TAG, "change = " + (String)value);
 		if(value == null){
@@ -255,6 +278,12 @@ public class ContShootingPreference extends PreferenceActivity implements OnPref
             intent.putExtra("interval", Integer.valueOf((String)value));
             this.setResult(INTERVAL, intent);
             finish();
+        }
+        else if(pref.getKey().equals("hidden_size")){
+            Intent intent = new Intent();
+            intent.putExtra("hidden_size", Integer.valueOf((String)value));
+            this.setResult(HIDDEN_SIZE, intent);
+            finish();            
         }
 		
 		return true;

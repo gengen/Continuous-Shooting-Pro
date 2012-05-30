@@ -53,6 +53,7 @@ public class ContShooting extends Activity {
     static final int RESPONSE_PICTURE_SIZE = 4;
     static final int RESPONSE_SHOOT_NUM = 5;
     static final int RESPONSE_INTERVAL = 6;
+    static final int RESPONSE_HIDDEN_SIZE = 7;
 
     SurfaceHolder mHolder;
     private int mCount = 0;
@@ -77,6 +78,8 @@ public class ContShooting extends Activity {
     int mPrevWidth = 0;
     int mPrevHeight = 0;
     
+    int mHiddenSizeIdx = 0;
+    
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -93,6 +96,7 @@ public class ContShooting extends Activity {
         String scene = ContShootingPreference.getCurrentSceneMode(this);
         String white = ContShootingPreference.getCurrentWhiteBalance(this);
         String size = ContShootingPreference.getCurrentPictureSize(this);
+        mHiddenSizeIdx = Integer.parseInt(ContShootingPreference.getCurrentHiddenSize(this));
         
         //Log.d(TAG, "picsize = " + size);
         
@@ -260,8 +264,25 @@ public class ContShooting extends Activity {
         }
 
     	FrameLayout frame = (FrameLayout)findViewById(R.id.camera_parent);
+    	/*
         int hide_width = mWidth / 4;
         int hide_height = hide_width * (4/3);
+        */
+        /*
+         * 隠しモードのプレビューサイズ設定
+         * 大=1/4, 小=1/6, 無し=1*1
+         */
+        int denom = 4;
+        if(mHiddenSizeIdx == 2){
+            denom = 6;
+        }
+        int hide_width = mWidth / denom;
+        int hide_height = hide_width / 3 * 4;
+
+        if(mHiddenSizeIdx == 3){
+            hide_height = 1;
+            hide_width = 1;            
+        }
         frame.setLayoutParams(new FrameLayout.LayoutParams(hide_width, hide_height, Gravity.BOTTOM));
 
     	displayHideMode();
@@ -454,6 +475,14 @@ public class ContShooting extends Activity {
             if(resultCode == RESPONSE_INTERVAL){
                 if(mPreview != null){
                     mPreview.setInterval(data.getIntExtra("interval", 0));
+                }
+            }
+            if(resultCode == RESPONSE_HIDDEN_SIZE){
+                //隠しモードサイズ設定
+                mHiddenSizeIdx = data.getIntExtra("hidden_size", 0);
+                //隠しモードの場合は、一旦戻す
+                if(mMaskFlag){
+                    setToNormal();
                 }
             }
         }

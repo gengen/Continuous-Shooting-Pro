@@ -55,7 +55,15 @@
    	<string name="display_hide_title">Hidden mode setting</string>
 	<string name="display_hide_summary">Set hidden mode when launching app</string>
 	
-	<string name="resolution_title">High resolution mode</string>
+	<string name="hidden_size">hidden_size</string>
+	<string name="hidden_size_title">Hidden mode size</string>
+	<string name="dialog_hidden_size_title">Hidden mode size</string>
+	<string name="hidden_size_summary">Set hidden mode preview size</string>
+	<string name="hidden_size_big">big</string>
+	<string name="hidden_size_small">small</string>
+	<string name="hidden_size_none">none</string>
+	
+    <string name="resolution_title">High resolution mode</string>
 	<string name="resolution_summary">Set high resolution</string>
 
 	<string name="ok">OK</string>

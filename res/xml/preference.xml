@@ -73,5 +73,15 @@
         	android:summary="@string/display_hide_summary"
         	>
         </CheckBoxPreference>
+        
+       	<ListPreference 
+    		android:key="@string/hidden_size"
+			android:title="@string/hidden_size_title"   
+    		android:dialogTitle="@string/dialog_hidden_size_title"
+			android:summary="@string/hidden_size_summary"
+			android:entries="@array/hidden_entries"
+			android:entryValues="@array/hidden_entryvalues"
+			>
+		</ListPreference>
 	</PreferenceCategory>   
 </PreferenceScreen>
