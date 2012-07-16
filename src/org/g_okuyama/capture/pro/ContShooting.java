@@ -85,7 +85,7 @@ public class ContShooting extends Activity {
     public void onCreate(Bundle savedInstanceState) {
     	//Log.d(TAG, "enter ContShooting#onCreate");
         super.onCreate(savedInstanceState);
-        //requestWindowFeature(Window.FEATURE_NO_TITLE);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.main);
         
         mNum = getString(R.string.sc_number);
