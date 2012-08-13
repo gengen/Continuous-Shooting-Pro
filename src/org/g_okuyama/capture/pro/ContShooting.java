@@ -382,7 +382,15 @@ public class ContShooting extends Activity {
     	        		startActivity(intent);
     	        	}
     	        	catch(ActivityNotFoundException e3){
-    	            	Toast.makeText(this, R.string.sc_menu_gallery_ng, Toast.LENGTH_SHORT).show();
+        	        	try{
+        	        		// for HTC
+        	        		intent = new Intent();
+        	        		intent.setClassName("com.htc.album", "com.htc.album.AlbumMain.ActivityMainDropList");
+        	        		startActivity(intent);
+        	        	}
+        	        	catch(ActivityNotFoundException e4){
+        	            	Toast.makeText(this, R.string.sc_menu_gallery_ng, Toast.LENGTH_SHORT).show();
+        	        	}
     	        	}
     	        }
     	    }
