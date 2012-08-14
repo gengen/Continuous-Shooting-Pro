@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.List;
 import java.util.Locale;
 
+import com.example.android.actionbarcompat.ActionBarActivity;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
@@ -20,6 +22,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -38,7 +41,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
-public class ContShooting extends Activity {
+public class ContShooting extends ActionBarActivity {
     private static final String TAG = "ContShooting";
     public static final String URL_JP = "http://www.yahoo.co.jp";
     public static final String URL_OTHER = "http://www.yahoo.com";
@@ -85,7 +88,7 @@ public class ContShooting extends Activity {
     public void onCreate(Bundle savedInstanceState) {
     	//Log.d(TAG, "enter ContShooting#onCreate");
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.main);
         
         mNum = getString(R.string.sc_number);
@@ -312,8 +315,12 @@ public class ContShooting extends Activity {
     }
     
     public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.main, menu);
+        
         super.onCreateOptionsMenu(menu);
 
+        /*
         //オプションメニュー(ギャラリー)
         MenuItem prefGallery = menu.add(0, MENU_DISP_GALLERY, 0, R.string.sc_menu_gallery);
         prefGallery.setIcon(android.R.drawable.ic_menu_gallery);
@@ -321,6 +328,7 @@ public class ContShooting extends Activity {
         //オプションメニュー(設定)
         MenuItem prefSetting = menu.add(0, MENU_DISP_SETTING, 0, R.string.sc_menu_setting);
         prefSetting.setIcon(android.R.drawable.ic_menu_preferences);
+        */
 
         return true;
     }
@@ -328,11 +336,11 @@ public class ContShooting extends Activity {
     //オプションメニュー選択時のリスナ
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case MENU_DISP_GALLERY:        	
+        case R.id.menu_gallery:        	
         	startGallery();
             break;
             
-        case MENU_DISP_SETTING:
+        case R.id.menu_setting:
             displaySettings();
         	break;
             

@@ -2,9 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.g_okuyama.capture.pro"
     android:versionCode="4"
-    android:versionName="1.2.1" >
+    android:versionName="1.3" >
 
-    <uses-sdk android:targetSdkVersion="11" android:minSdkVersion="10" />
+    <uses-sdk android:targetSdkVersion="14" android:minSdkVersion="10" />
    	<uses-permission android:name="android.permission.INTERNET"/>
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.CAMERA"/>
@@ -14,11 +14,12 @@
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/MyTheme" >
+        android:theme="@style/AppTheme" >
         <activity
             android:label="@string/app_name"
             android:name=".ContShooting"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            >
             <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,0 +1,7 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_revert"
+        android:title="@string/sc_menu_revert"
+        android:icon="@android:drawable/ic_menu_revert"
+        android:orderInCategory="0"
+        android:showAsAction="always"/>
+</menu>

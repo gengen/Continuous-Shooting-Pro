@@ -6,6 +6,7 @@
     <string name="sc_menu_gallery">gallery</string>
     <string name="sc_menu_gallery_ng">Coundn\'t launch gallery.</string>
     <string name="sc_menu_setting">settings</string>
+    <string name="sc_menu_revert">back</string>
     
     <string name="sc_alert_title">Notify</string>
     <string name="sc_alert_sd">Please insert a SD card.</string>

@@ -6,6 +6,7 @@
     <string name="sc_menu_gallery">ギャラリー</string>
     <string name="sc_menu_gallery_ng">ギャラリーを起動できません</string>
     <string name="sc_menu_setting">設定</string>
+    <string name="sc_menu_revert">戻る</string>
 
     <string name="sc_alert_title">通知</string>
     <string name="sc_alert_sd">SDカードが利用できません</string>

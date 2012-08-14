@@ -14,19 +14,15 @@
   limitations under the License.
   -->
 
-<resources>
-
-    <style name="AppTheme" parent="android:style/Theme.Holo">
-        <item name="android:actionBarStyle">@style/ActionBar</item>
-        <item name="android:windowContentOverlay">@drawable/actionbar_shadow</item>
-    </style>
-
-    <style name="ActionBar" parent="android:style/Widget.Holo.ActionBar">
-        <item name="android:titleTextStyle">@style/ActionBarTitle</item>
-        <item name="android:icon">@drawable/ic_launcher</item>
-    </style>
-
-    <style name="ActionBarTitle">
-    </style>
-
-</resources>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_gallery"
+        android:title="@string/sc_menu_gallery"
+        android:icon="@android:drawable/ic_menu_gallery"
+        android:orderInCategory="0"
+        android:showAsAction="ifRoom"/>
+    <item android:id="@+id/menu_setting"
+        android:title="@string/sc_menu_setting"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:orderInCategory="1"
+        android:showAsAction="ifRoom" />
+</menu>

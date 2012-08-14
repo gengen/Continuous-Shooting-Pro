@@ -16,6 +16,9 @@ import android.preference.PreferenceScreen;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 public class ContShootingPreference extends PreferenceActivity implements OnPreferenceChangeListener{
     public static final String TAG = "ContShooting";
@@ -322,4 +325,26 @@ public class ContShootingPreference extends PreferenceActivity implements OnPref
 
 	    return true;
 	}
+	
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.pref, menu);
+        
+        super.onCreateOptionsMenu(menu);
+        return true;
+    }
+    
+    //オプションメニュー選択時のリスナ
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.menu_revert:
+        	finish();
+            break;
+
+        default:
+            //何もしない
+        }
+
+        return true;
+    }
 }
