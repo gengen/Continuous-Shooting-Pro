@@ -1,11 +1,14 @@
 package org.g_okuyama.capture.pro;
 
+import com.example.android.actionbarcompat.ActionBarPreferenceActivity;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.Camera;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
@@ -19,8 +22,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.Window;
 
-public class ContShootingPreference extends PreferenceActivity implements OnPreferenceChangeListener{
+public class ContShootingPreference extends ActionBarPreferenceActivity implements OnPreferenceChangeListener{
     public static final String TAG = "ContShooting";
 
     public static final String DEFAULT_SHOOT_NUM = "0";
@@ -41,8 +45,12 @@ public class ContShootingPreference extends PreferenceActivity implements OnPref
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
+    	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB){
+    		requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+    	}
         super.onCreate(savedInstanceState);
         this.addPreferencesFromResource(R.xml.preference);
+        setTitle(R.string.app_name);
         
         Bundle extras = getIntent().getExtras();
         String[] effectList = null;

@@ -90,6 +90,7 @@ public class ContShooting extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.main);
+        setTitle("");
         
         mNum = getString(R.string.sc_number);
         mResolver = getContentResolver();
@@ -235,7 +236,8 @@ public class ContShooting extends ActionBarActivity {
         
         displayNormalMode();
         mMaskFlag = false;
-        setTitle(R.string.app_name);
+        //setTitle(R.string.app_name);
+        setTitle("");
 
         if(mPreview != null){
     		mPreview.startPreview();

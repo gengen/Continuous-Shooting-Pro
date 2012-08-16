@@ -23,6 +23,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.XmlResourceParser;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.view.InflateException;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -59,7 +60,10 @@ public class ActionBarHelperBase extends ActionBarHelper {
     /**{@inheritDoc}*/
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        mActivity.requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+        //mActivity.requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+        if (!(mActivity instanceof PreferenceActivity)) {
+        	mActivity.requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+        } 
     }
 
     /**{@inheritDoc}*/
@@ -94,16 +98,19 @@ public class ActionBarHelperBase extends ActionBarHelper {
         springLayoutParams.weight = 1;
 
         // Add Home button
+        /*
         SimpleMenu tempMenu = new SimpleMenu(mActivity);
         SimpleMenuItem homeItem = new SimpleMenuItem(
                 tempMenu, android.R.id.home, 0, mActivity.getString(R.string.app_name));
-        homeItem.setIcon(R.drawable.ic_home);
+        //homeItem.setIcon(R.drawable.ic_home);
+        //homeItem.setIcon(R.drawable.ic_launcher);
         addActionItemCompatFromMenuItem(homeItem);
+        */
 
         // Add title text
         TextView titleText = new TextView(mActivity, null, R.attr.actionbarCompatTitleStyle);
         titleText.setLayoutParams(springLayoutParams);
-        titleText.setText(mActivity.getTitle());
+        //titleText.setText(mActivity.getTitle());
         actionBarCompat.addView(titleText);
     }
 
