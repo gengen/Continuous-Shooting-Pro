@@ -101,12 +101,14 @@ public class ImageAsyncTask extends AsyncTask<Bitmap, Void, Bitmap> {
 
         FileOutputStream fos = null;
         File savefile = null;
-        String datastr = getCurrentDate();
+        String datestr = getCurrentDate();
+        long date = System.currentTimeMillis();
+
         try{
             if(mFile.exists() == false){
                 mFile.mkdir();
             }
-            savefile = new File(mFile.getPath(), datastr + ".jpg");
+            savefile = new File(mFile.getPath(), datestr + ".jpg");
             fos = new FileOutputStream(savefile);
             fos.write(data);
             fos.flush();
@@ -131,9 +133,9 @@ public class ImageAsyncTask extends AsyncTask<Bitmap, Void, Bitmap> {
         values.put(Images.Media.SIZE, savefile.length());
         //values.put(Images.Media.TITLE,strFile);
         //values.put(Images.Media.DISPLAY_NAME,strFile);
-        values.put(Images.Media.DATE_ADDED, datastr);
-        values.put(Images.Media.DATE_TAKEN, datastr);
-        values.put(Images.Media.DATE_MODIFIED, datastr);
+        values.put(Images.Media.DATE_ADDED, date);
+        values.put(Images.Media.DATE_TAKEN, date);
+        values.put(Images.Media.DATE_MODIFIED, date);
         //values.put(Images.Media.DESCRIPTION,"");
         //values.put(Images.Media.LATITUDE,0.0);
         //values.put(Images.Media.LONGITUDE,0.0);
