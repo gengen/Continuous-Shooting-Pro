@@ -381,8 +381,8 @@ class CameraPreview implements SurfaceHolder.Callback {
     }
 
     void doAutoFocus(){
-        mCamera.setPreviewCallback(null);
     	if(mCamera != null && mFocus != null){
+            mCamera.setPreviewCallback(null);
     		try{
     			mCamera.autoFocus(mFocus);
     		}catch(Exception e){
