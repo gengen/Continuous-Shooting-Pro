@@ -97,7 +97,7 @@ class CameraPreview implements SurfaceHolder.Callback {
 	}
 	
     public void setField(String effect, String scene, String white, String size, int width, int height){
-    	Log.d(TAG, "enter CameraPreview#setField");
+    	//Log.d(TAG, "enter CameraPreview#setField");
 
     	mEffect = effect;
         mScene = scene;
@@ -153,17 +153,17 @@ class CameraPreview implements SurfaceHolder.Callback {
         //ズームをサポートしていない場合はViewを見えなくする
         Camera.Parameters params = mCamera.getParameters();
 		if(params.isSmoothZoomSupported()){
-			Log.d(TAG, "this terminal supports smooth zoom.");
+			//Log.d(TAG, "this terminal supports smooth zoom.");
 			mSmoothZoom = true;
 			mCamera.setZoomChangeListener(new Camera.OnZoomChangeListener(){
                 public void onZoomChange(int zoomValue, boolean stopped, Camera camera) {
-                    Log.d(TAG, "onZoomChange: value = " + zoomValue + " stopped = " + stopped);
+                    //Log.d(TAG, "onZoomChange: value = " + zoomValue + " stopped = " + stopped);
                     mZoomStopped = stopped;
                     
                     if((zoomValue != mZoomIdx) && stopped){
                         //指定したズーム処理が追いついていない場合(すばやくスライドさせた場合など)
                         if(mCamera != null){
-                            Log.d(TAG, "onZoomChange->stopped");
+                            //Log.d(TAG, "onZoomChange->stopped");
                             try{
                                 mCamera.startSmoothZoom(mZoomIdx);
                             }catch(Exception e){
@@ -176,7 +176,7 @@ class CameraPreview implements SurfaceHolder.Callback {
 		}
 		else{
 			if(params.isZoomSupported()){
-				Log.d(TAG, "this terminal supports zoom.");
+				//Log.d(TAG, "this terminal supports zoom.");
 				mZoom = true;
 			}
 			else{
@@ -409,11 +409,11 @@ class CameraPreview implements SurfaceHolder.Callback {
 		Camera.Parameters params = mCamera.getParameters();
     	if(mZoomMax == 0){
     		mZoomMax = params.getMaxZoom();
-    		Log.d(TAG, "zoom max = " + mZoomMax);
+    		//Log.d(TAG, "zoom max = " + mZoomMax);
     	}
     	
 		mZoomIdx = mZoomMax * progress / 100;
-		Log.d(TAG, "value = " + mZoomIdx);
+		//Log.d(TAG, "value = " + mZoomIdx);
     	
     	if(mSmoothZoom){
     		try{
