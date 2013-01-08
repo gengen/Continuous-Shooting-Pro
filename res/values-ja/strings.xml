@@ -53,6 +53,7 @@
 	<string name="interval_not_set">指定無し</string>
 	<string name="str_sec">秒</string>
 	
+    <string name="display_hide">display_hide</string>
 	<string name="display_hide_title">隠しモード設定</string>
 	<string name="display_hide_summary">起動時に「隠しモード」に設定する</string>
 
@@ -73,4 +74,8 @@
 	<string name="pref_confirm_message">
 	    高解像度モードは画像サイズが大きくなるため連写速度が落ちます。高解像度モードに設定しますか？
 	</string>
+	
+	<string name="display_sleep">display_sleep</string>
+	<string name="display_sleep_title">スリープ設定</string>
+	<string name="display_sleep_summary">アプリ起動時はスリープしない（画面常時点灯）</string>
 </resources>

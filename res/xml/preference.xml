@@ -83,5 +83,12 @@
 			android:entryValues="@array/hidden_entryvalues"
 			>
 		</ListPreference>
+		
+		<CheckBoxPreference 
+        	android:key="@string/display_sleep"
+            android:title="@string/display_sleep_title"
+        	android:summary="@string/display_sleep_summary"
+        	>
+        </CheckBoxPreference>
 	</PreferenceCategory>   
 </PreferenceScreen>

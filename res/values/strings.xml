@@ -53,6 +53,7 @@
 	<string name="interval_not_set">No setting</string>
     <string name="str_sec">sec.</string>
     
+    <string name="display_hide">display_hide</string>
    	<string name="display_hide_title">Hidden mode setting</string>
 	<string name="display_hide_summary">Set hidden mode when launching app</string>
 	
@@ -73,4 +74,8 @@
 	<string name="pref_confirm_message">
 	    Shooting speed falls because picture size becomes large. Is this OK?
 	</string>
+	
+	<string name="display_sleep">display_sleep</string>
+	<string name="display_sleep_title">Sleep setting</string>
+	<string name="display_sleep_summary">Keep display on when launching app</string>
 </resources>

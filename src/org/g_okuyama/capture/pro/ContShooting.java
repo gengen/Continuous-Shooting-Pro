@@ -65,12 +65,13 @@ public class ContShooting extends ActionBarActivity {
     //éBâeíÜÇ©î€Ç©Åi0:í‚é~íÜÅA1ÅFéBâeíÜÅj
     public int mMode = 0;
     private boolean mMaskFlag = false;
+    private boolean mSleepFlag = false;
     
     private ImageButton mButton = null;
     private ImageButton mMaskButton = null;
     private ImageButton mFocusButton = null;
     private SeekBar mSeekBar = null;
-    private String mNum = null;
+    //private String mNum = null;
     private ContentResolver mResolver;
     
     private WebView mWebView = null;
@@ -92,7 +93,7 @@ public class ContShooting extends ActionBarActivity {
         setContentView(R.layout.main);
         setTitle("");
         
-        mNum = getString(R.string.sc_number);
+        //mNum = getString(R.string.sc_number);
         mResolver = getContentResolver();
         
         //ê›íËílÇÃéÊìæ
@@ -119,7 +120,7 @@ public class ContShooting extends ActionBarActivity {
         mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
         mText = (TextView)findViewById(R.id.text1);
-    	mText.setText(mNum + System.getProperty("line.separator") + "0");
+    	mText.setText(/*mNum + System.getProperty("line.separator") + */"0");
 
     	//òAé ñáêîê›íË
         String num = ContShootingPreference.getCurrentShootNum(this);
@@ -507,7 +508,7 @@ public class ContShooting extends ActionBarActivity {
     }
     
     public void count(){
-    	mText.setText(mNum + System.getProperty("line.separator") + Integer.toString(++mCount));
+    	mText.setText(/*mNum + System.getProperty("line.separator") + */Integer.toString(++mCount));
     }
     
     public void displayStart(){
@@ -546,10 +547,28 @@ public class ContShooting extends ActionBarActivity {
     protected void onPause(){
         //Log.d(TAG, "enter ContShooting#onPause");    	
     	super.onPause();
+    	
+        if(mSleepFlag){
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            mSleepFlag = false;
+        }
     }
     
     protected void onResume(){
         super.onResume();
+        
+        if(ContShootingPreference.isSleepMode(this)){
+            if(!mSleepFlag){
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                mSleepFlag = true;                
+            }
+        }
+        else{
+            if(mSleepFlag){
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                mSleepFlag = false;                
+            }
+        }
     }
     
     protected void onDestroy(){

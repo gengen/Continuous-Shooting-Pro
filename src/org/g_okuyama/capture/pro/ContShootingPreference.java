@@ -236,6 +236,11 @@ public class ContShootingPreference extends ActionBarPreferenceActivity implemen
         return PreferenceManager.getDefaultSharedPreferences(c)
                 .getString("hidden_size", /*default*/DEFAULT_HIDDEN_SIZE);
     }
+    
+    public static boolean isSleepMode(Context c){
+        return PreferenceManager.getDefaultSharedPreferences(c)
+                .getBoolean("display_sleep", false);
+    }
 
     public boolean onPreferenceChange(Preference pref, Object newValue) {
 		final CharSequence value = (CharSequence)newValue;
