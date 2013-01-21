@@ -135,6 +135,25 @@ class CameraPreview implements SurfaceHolder.Callback {
     	        return;
     	    }
     	    
+            if(mCamera == null){
+                new AlertDialog.Builder(mContext)
+                .setTitle(R.string.sc_error_title)
+                .setMessage(mContext.getString(R.string.sc_error_cam))
+                .setPositiveButton(R.string.sc_error_cam_ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        System.exit(0);
+                    }
+                })
+                .show();
+                    
+                try {
+                    this.finalize();
+                } catch (Throwable t) {
+                    System.exit(0);                 
+                }
+                return;
+            }
+    	    
     	    mCamera.setDisplayOrientation(90);
     	}
     	
@@ -188,6 +207,10 @@ class CameraPreview implements SurfaceHolder.Callback {
     }
     
     private void createSupportList(){
+        if(mCamera == null){
+            return;
+        }
+        
         Camera.Parameters params = mCamera.getParameters();
         mSupportList = Reflect.getSupportedPreviewSizes(params);
            
