@@ -236,6 +236,12 @@ public class ContShooting extends ActionBarActivity {
         }
     }
     
+    void displayFocus(){
+        if(mOverlay != null){
+            mOverlay.displayFocus();
+        }
+    }
+    
     public void setToNormal(){
     	if(mPreview != null){
     		mPreview.stopPreview();
