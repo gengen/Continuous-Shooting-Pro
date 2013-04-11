@@ -30,6 +30,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
@@ -66,6 +67,8 @@ public class ContShooting extends ActionBarActivity {
     public int mMode = 0;
     private boolean mMaskFlag = false;
     private boolean mSleepFlag = false;
+    
+    private OverlayView mOverlay;
     
     private ImageButton mButton = null;
     private ImageButton mMaskButton = null;
@@ -147,7 +150,8 @@ public class ContShooting extends ActionBarActivity {
 						mPreview.resumeShooting();
 						mMode = 1;
                         //フォーカスボタン、マスクボタン、ズームボタンを見えなくする
-                        mFocusButton.setVisibility(View.INVISIBLE);
+						//for 1.5 撮影中でもフォーカスできるようにする
+                        //mFocusButton.setVisibility(View.INVISIBLE);
                         mMaskButton.setVisibility(View.INVISIBLE);
                         if(mPreview.isZoomSupported()){
                         	FrameLayout zoom = (FrameLayout)findViewById(R.id.zoom_layout);
@@ -158,7 +162,7 @@ public class ContShooting extends ActionBarActivity {
 						mPreview.stopShooting();
 						mMode = 0;
                         //フォーカスボタン、マスクボタン、ズームボタンを見えるようにする
-                        mFocusButton.setVisibility(View.VISIBLE);
+                        //mFocusButton.setVisibility(View.VISIBLE);
                         mMaskButton.setVisibility(View.VISIBLE);
                         if(mPreview.isZoomSupported()){
                         	FrameLayout zoom = (FrameLayout)findViewById(R.id.zoom_layout);
@@ -186,8 +190,12 @@ public class ContShooting extends ActionBarActivity {
         mFocusButton = (ImageButton)findViewById(R.id.focusbtn);
         mFocusButton.setOnClickListener(new OnClickListener(){
 			public void onClick(View v) {
+			    if(mOverlay != null){
+			        mOverlay.displayFocus();
+			    }
+	             
 				if(mPreview != null){
-						mPreview.doAutoFocus();
+				    mPreview.doAutoFocus();
 				}
 			}
         });
@@ -214,6 +222,18 @@ public class ContShooting extends ActionBarActivity {
             }
             
         });
+        
+        //描画用Viewを追加
+        mOverlay = new OverlayView(mPreview, this);
+        FrameLayout frame = (FrameLayout)findViewById(R.id.camera_parent);
+        frame.addView(mOverlay, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+    }
+    
+    
+    void clearCanvas(){
+        if(mOverlay != null){
+            mOverlay.clearCanvas();
+        }
     }
     
     public void setToNormal(){
