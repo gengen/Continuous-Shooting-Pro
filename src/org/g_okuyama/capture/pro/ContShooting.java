@@ -190,9 +190,7 @@ public class ContShooting extends ActionBarActivity {
         mFocusButton = (ImageButton)findViewById(R.id.focusbtn);
         mFocusButton.setOnClickListener(new OnClickListener(){
 			public void onClick(View v) {
-			    if(mOverlay != null){
-			        mOverlay.displayFocus();
-			    }
+                displayFocus();
 	             
 				if(mPreview != null){
 				    mPreview.doAutoFocus();
@@ -231,15 +229,31 @@ public class ContShooting extends ActionBarActivity {
     
     
     void clearCanvas(){
+        enableMask();
+
         if(mOverlay != null){
             mOverlay.clearCanvas();
-        }
+        }        
     }
     
     void displayFocus(){
+        disableMask();
+        
         if(mOverlay != null){
             mOverlay.displayFocus();
         }
+    }
+    
+    void enableMask(){
+        //隠しモードボタンを表示する(撮影時以下)
+        if(mMode == 0){
+            mMaskButton.setVisibility(View.VISIBLE);
+        }        
+    }
+    
+    void disableMask(){
+        //隠しモードボタンを見えなくする
+        mMaskButton.setVisibility(View.INVISIBLE);
     }
     
     public void setToNormal(){

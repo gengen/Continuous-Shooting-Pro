@@ -52,6 +52,9 @@ public class OverlayView extends View {
     }
 
     public boolean onTouchEvent(MotionEvent event){
+        //フォーカス中はマスクボタンを表示しない
+        ((ContShooting)mContext).disableMask();
+        
         //隠しモード中はフォーカスだけしてアイコンを表示しない
         if(((ContShooting)mContext).isMask()){
             mPreview.doAutoFocus();

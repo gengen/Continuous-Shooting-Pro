@@ -244,7 +244,7 @@ public class ContShootingPreference extends ActionBarPreferenceActivity implemen
 
     public boolean onPreferenceChange(Preference pref, Object newValue) {
 		final CharSequence value = (CharSequence)newValue;
-		Log.d(TAG, "change = " + (String)value);
+		//Log.d(TAG, "change = " + (String)value);
 		if(value == null){
 			return false;
 		}
