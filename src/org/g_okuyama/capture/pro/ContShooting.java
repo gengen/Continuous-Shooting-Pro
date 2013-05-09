@@ -14,6 +14,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -24,6 +25,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.OrientationEventListener;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -31,11 +33,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.animation.RotateAnimation;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -74,8 +78,15 @@ public class ContShooting extends ActionBarActivity {
     private ImageButton mMaskButton = null;
     private ImageButton mFocusButton = null;
     private SeekBar mSeekBar = null;
+    private ImageView mZoomOut = null;
+    private ImageView mZoomIn = null;
+    
     //private String mNum = null;
     private ContentResolver mResolver;
+    
+    OrientationEventListener mOrientationListener;
+    int mDegree = 0;
+    int mPrevTarget = 0;
     
     private WebView mWebView = null;
     //全体の画面サイズ
@@ -94,6 +105,35 @@ public class ContShooting extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.main);
+        
+        
+        mOrientationListener = new OrientationEventListener(this, SensorManager.SENSOR_DELAY_UI) {
+            @Override
+            public void onOrientationChanged(int orientation) {
+                int degree = 0;
+                if ( orientation > 0 && orientation <= 45) {
+                    degree = 0;
+                } else
+                if ( orientation > 45 && orientation <= 135) {
+                    degree = 90;
+                } else
+                if ( orientation > 135 && orientation <= 225) {
+                    degree = 180;
+                } else
+                if ( orientation > 225 && orientation <= 315) {
+                    degree = 270;
+                } else { 
+                    degree = 0;
+                }
+                if (mDegree != degree) {
+                    mDegree = degree;
+                    //向きに応じてボタン等を回転させる
+                    rotate(degree);
+                }
+            }
+        };
+        mOrientationListener.enable();
+        
         setTitle("");
         
         //mNum = getString(R.string.sc_number);
@@ -141,6 +181,65 @@ public class ContShooting extends ActionBarActivity {
     	setListener();        
     }
     
+    
+    private void rotate(int degree){
+        ImageButton[] btns = {mButton, mMaskButton, mFocusButton};
+        
+        int target = 0;
+        if(degree == 0){
+            target = 90;
+        }
+        else if(degree == 90){
+            target = 0;
+        }
+        else if(degree == 180){
+            target = -90;
+        }
+        else if(degree == 270){
+            target = 180;
+        }
+        
+        for(ImageButton btn : btns){
+            if(btn.equals(mMaskButton) && mMode == 1){
+                continue;
+            }
+            RotateAnimation rotate = new RotateAnimation(mPrevTarget, target, btn.getWidth()/2, btn.getHeight()/2);
+            rotate.setDuration(500);
+            rotate.setFillAfter(true);
+            btn.startAnimation(rotate);
+        }
+        
+        RotateAnimation rotate = new RotateAnimation(mPrevTarget, target, mText.getWidth()/2, mText.getHeight()/2);
+        rotate.setDuration(500);
+        rotate.setFillAfter(true);
+        mText.startAnimation(rotate);
+        
+        RotateAnimation rotateZoomIn = new RotateAnimation(mPrevTarget, target, mZoomIn.getWidth()/2, mZoomIn.getHeight()/2);
+        rotateZoomIn.setDuration(500);
+        rotateZoomIn.setFillAfter(true);
+        mZoomIn.startAnimation(rotateZoomIn);
+        
+        RotateAnimation rotateZoomOut = new RotateAnimation(mPrevTarget, target, mZoomOut.getWidth()/2, mZoomOut.getHeight()/2);
+        rotateZoomOut.setDuration(500);
+        rotateZoomOut.setFillAfter(true);
+        mZoomOut.startAnimation(rotateZoomOut);
+        
+        //回転時、表示がズレるので、断念
+        /*
+        if(mWebView != null){
+            int x = mWebView.getWidth()/2;
+            int y = mWebView.getHeight()/2;
+            Log.d(TAG, "x,y = " + x + "," + y);
+            RotateAnimation rotateWeb = new RotateAnimation(mPrevTarget, target, 100, 100);
+            rotateWeb.setDuration(0);
+            rotateWeb.setFillAfter(true);
+            mWebView.startAnimation(rotate);
+        }
+        */
+        
+        mPrevTarget = target;
+    }
+    
     private void setListener(){
         mButton = (ImageButton)findViewById(R.id.imgbtn);
         mButton.setOnClickListener(new OnClickListener(){
@@ -152,6 +251,9 @@ public class ContShooting extends ActionBarActivity {
                         //フォーカスボタン、マスクボタン、ズームボタンを見えなくする
 						//for 1.5 撮影中でもフォーカスできるようにする
                         //mFocusButton.setVisibility(View.INVISIBLE);
+
+                        //アニメーションをクリアしてからでないとvisibilityが操作できないためクリア
+                        mMaskButton.clearAnimation();
                         mMaskButton.setVisibility(View.INVISIBLE);
                         if(mPreview.isZoomSupported()){
                         	FrameLayout zoom = (FrameLayout)findViewById(R.id.zoom_layout);
@@ -163,7 +265,19 @@ public class ContShooting extends ActionBarActivity {
 						mMode = 0;
                         //フォーカスボタン、マスクボタン、ズームボタンを見えるようにする
                         //mFocusButton.setVisibility(View.VISIBLE);
+                        mMaskButton.clearAnimation();
                         mMaskButton.setVisibility(View.VISIBLE);
+                        if(mDegree != 90){
+                            RotateAnimation rotate = new RotateAnimation(
+                                    90, 
+                                    mPrevTarget, 
+                                    mMaskButton.getWidth()/2, 
+                                    mMaskButton.getHeight()/2);
+                            rotate.setDuration(0);
+                            rotate.setFillAfter(true);
+                            mMaskButton.startAnimation(rotate);
+                        }
+                        
                         if(mPreview.isZoomSupported()){
                         	FrameLayout zoom = (FrameLayout)findViewById(R.id.zoom_layout);
                         	zoom.setVisibility(View.VISIBLE);
@@ -221,6 +335,9 @@ public class ContShooting extends ActionBarActivity {
             
         });
         
+        mZoomIn = (ImageView)findViewById(R.id.zoom_in);
+        mZoomOut = (ImageView)findViewById(R.id.zoom_out);
+        
         //描画用Viewを追加
         mOverlay = new OverlayView(mPreview, this);
         FrameLayout frame = (FrameLayout)findViewById(R.id.camera_parent);
@@ -247,12 +364,24 @@ public class ContShooting extends ActionBarActivity {
     void enableMask(){
         //隠しモードボタンを表示する(撮影時以下)
         if(mMode == 0){
+            mMaskButton.clearAnimation();
             mMaskButton.setVisibility(View.VISIBLE);
+            if(mDegree != 90){
+                RotateAnimation rotate = new RotateAnimation(
+                        90, 
+                        mPrevTarget, 
+                        mMaskButton.getWidth()/2, 
+                        mMaskButton.getHeight()/2);
+                rotate.setDuration(0);
+                rotate.setFillAfter(true);
+                mMaskButton.startAnimation(rotate);
+            }
         }        
     }
     
     void disableMask(){
         //隠しモードボタンを見えなくする
+        mMaskButton.clearAnimation();
         mMaskButton.setVisibility(View.INVISIBLE);
     }
     
@@ -584,6 +713,10 @@ public class ContShooting extends ActionBarActivity {
         return mMaskFlag;
     }
     
+    public int getDegree(){
+        return mDegree;
+    }
+    
     protected void onPause(){
         //Log.d(TAG, "enter ContShooting#onPause");    	
     	super.onPause();
@@ -620,6 +753,8 @@ public class ContShooting extends ActionBarActivity {
     	if(mPreview != null){
     	    mPreview.release();
     	}
+    	
+        mOrientationListener.disable();
     }
     
     protected void onRestart(){

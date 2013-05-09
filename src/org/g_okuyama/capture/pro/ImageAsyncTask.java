@@ -45,7 +45,9 @@ public class ImageAsyncTask extends AsyncTask<Bitmap, Void, Bitmap> {
         //‰ñ“]
         Matrix matrix = new Matrix();
         // ‰ñ“]‚³‚¹‚éŠp“x‚ðŽw’è
-        matrix.postRotate(90.0f);   
+        int degree = ((ContShooting)mContext).getDegree();
+        //matrix.postRotate(90.0f);
+        matrix.postRotate(degree);
         retBmp = Bitmap.createBitmap(bmp[0], 0, 0, bmp[0].getWidth(), bmp[0].getHeight(), matrix, true);
         bmp[0].recycle();
         bmp[0] = null;

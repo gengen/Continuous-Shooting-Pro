@@ -47,6 +47,7 @@
        		    android:orientation="horizontal"
        		>
 		       	<ImageView
+       				android:id="@+id/zoom_out"		       	    
 		       	    android:layout_width="wrap_content"
 	    	   	    android:layout_height="wrap_content"
 	       	    	android:src="@drawable/zoom_out"
@@ -61,6 +62,7 @@
 					android:layout_gravity="center_vertical"
 				/>
            		<ImageView
+       				android:id="@+id/zoom_in"		       	    
 	       	    	android:layout_width="wrap_content"
 	       	    	android:layout_height="wrap_content"
 	       	    	android:src="@drawable/zoom_in"
@@ -69,58 +71,59 @@
        </FrameLayout>
 </FrameLayout>
 
-<LinearLayout
-       android:layout_width="fill_parent"
-       android:layout_height="50sp"
-       android:orientation="horizontal"
-   	   android:gravity="bottom"
-       >
+	<FrameLayout
+    	android:layout_width="fill_parent"
+       	android:layout_height="50sp"
+       	android:orientation="horizontal"
+   	   	android:gravity="bottom"
+       	>
+       
+	    <LinearLayout
+    		android:layout_width="wrap_content"
+	       	android:layout_height="fill_parent"
+	        android:orientation="horizontal"
+	        >
     
-	   <ImageButton
-       android:id="@+id/mask_imgbtn"
-       android:src="@drawable/scale_down"
-       android:layout_height="50sp"
-       android:layout_width="50sp"
-	   android:background="@null"
-	   android:scaleType="fitXY"
-	   >
-       </ImageButton>
+		   	<ImageButton
+		       	android:id="@+id/mask_imgbtn"
+    		   	android:src="@drawable/scale_down"
+       			android:layout_height="50sp"
+			    android:layout_width="50sp"
+		   		android:background="@null"
+	   			android:scaleType="fitXY"
+	   		>
+       		</ImageButton>
        
-       <ImageButton 
-           android:id="@+id/focusbtn"
-           android:src="@drawable/focus"
-           android:background="@null"
-	       android:layout_height="50sp"
-    	   android:layout_width="50sp"
-    	   android:scaleType="fitXY"
-       />
+	       	<ImageButton 
+				android:id="@+id/focusbtn"
+        	   	android:src="@drawable/focus"
+           		android:background="@null"
+		       	android:layout_height="50sp"
+    		   	android:layout_width="50sp"
+    		   	android:scaleType="fitXY"
+		    />
+       	</LinearLayout>
        
-	   <TextView
-    	android:layout_width="0pt"
-        android:layout_height="fill_parent"
-        android:layout_weight="1"
-       android:background="#00000000"
-	   >
-       </TextView>
+	   	<ImageButton
+			android:id="@+id/imgbtn"
+			android:src="@drawable/start"
+       		android:background="@null"
+       		android:layout_height="50sp"
+       		android:layout_width="50sp"
+       		android:layout_gravity="center"
+	   		android:scaleType="fitXY"
+       	>
+       	</ImageButton>
 
-	   <TextView
-       android:id="@+id/text1"
-       android:layout_height="fill_parent"
-       android:layout_width="wrap_content"
-       android:gravity="center"
-       android:background="#00000000"
-       android:text="" 
-       >
-       </TextView>
-	   <ImageButton
-       android:id="@+id/imgbtn"
-       android:src="@drawable/start"
-       android:background="@null"
-       android:layout_height="50sp"
-       android:layout_width="50sp"
-       android:layout_gravity="right"
-	   android:scaleType="fitXY"
-       >
-       </ImageButton>
-</LinearLayout>
+		<TextView
+		   	android:id="@+id/text1"
+    	   	android:layout_height="fill_parent"
+       		android:layout_width="wrap_content"
+       		android:layout_gravity="right"
+       		android:gravity="center_vertical"
+       		android:background="#00000000"
+       		android:text="" 
+       	>
+       	</TextView>
+	</FrameLayout>
 </LinearLayout>
