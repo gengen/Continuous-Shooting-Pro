@@ -186,17 +186,18 @@ public class ContShooting extends ActionBarActivity {
         ImageButton[] btns = {mButton, mMaskButton, mFocusButton};
         
         int target = 0;
+        //TODO:for tablet
         if(degree == 0){
-            target = 90;
-        }
-        else if(degree == 90){
             target = 0;
         }
-        else if(degree == 180){
+        else if(degree == 90){
             target = -90;
         }
-        else if(degree == 270){
+        else if(degree == 180){
             target = 180;
+        }
+        else if(degree == 270){
+            target = 90;
         }
         
         for(ImageButton btn : btns){
@@ -267,9 +268,10 @@ public class ContShooting extends ActionBarActivity {
                         //mFocusButton.setVisibility(View.VISIBLE);
                         mMaskButton.clearAnimation();
                         mMaskButton.setVisibility(View.VISIBLE);
-                        if(mDegree != 90){
+                        //TODO:for tablet
+                        if(mDegree != 0){
                             RotateAnimation rotate = new RotateAnimation(
-                                    90, 
+                                    0, 
                                     mPrevTarget, 
                                     mMaskButton.getWidth()/2, 
                                     mMaskButton.getHeight()/2);
@@ -366,9 +368,10 @@ public class ContShooting extends ActionBarActivity {
         if(mMode == 0){
             mMaskButton.clearAnimation();
             mMaskButton.setVisibility(View.VISIBLE);
-            if(mDegree != 90){
+            //TODO:for tablet
+            if(mDegree != 0){
                 RotateAnimation rotate = new RotateAnimation(
-                        90, 
+                        0, 
                         mPrevTarget, 
                         mMaskButton.getWidth()/2, 
                         mMaskButton.getHeight()/2);
