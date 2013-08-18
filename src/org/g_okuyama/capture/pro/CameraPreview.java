@@ -309,6 +309,10 @@ class CameraPreview implements SurfaceHolder.Callback {
                 if(mPreviewCallback == null){
                     mPreviewCallback = new PreviewCallback(CameraPreview.this);
                 }
+                
+                //onCreateやonResume、surfaceChangedなどでは自動連写ができなかったため、
+                //AutoFocusCallbackに入れて連写することにした
+                ((ContShooting)mContext).shootIfAuto();
             }
         };
 

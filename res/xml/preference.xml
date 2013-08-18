@@ -31,6 +31,13 @@
 			android:defaultValue="0" 
 			>
 		</ListPreference>
+		
+    	<CheckBoxPreference 
+        	android:key="@string/auto_shoot"
+            android:title="@string/auto_shoot_title"
+        	android:summary="@string/auto_shoot_summary"
+        	>
+        </CheckBoxPreference>
 
         <CheckBoxPreference 
         	android:key="high_resolution"

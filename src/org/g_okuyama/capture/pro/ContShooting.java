@@ -71,6 +71,7 @@ public class ContShooting extends ActionBarActivity {
     public int mMode = 0;
     private boolean mMaskFlag = false;
     private boolean mSleepFlag = false;
+    private boolean mAutoFlag = false;
     
     private OverlayView mOverlay;
     
@@ -178,7 +179,11 @@ public class ContShooting extends ActionBarActivity {
         }
 
         //register UI Listener
-    	setListener();        
+    	setListener();
+    	
+    	if(ContShootingPreference.isAutoShoot(this)){
+    		mAutoFlag = true;
+    	}
     }
     
     
@@ -247,43 +252,10 @@ public class ContShooting extends ActionBarActivity {
 			public void onClick(View v) {
 				if(mPreview != null){
 					if(mMode == 0){
-						mPreview.resumeShooting();
-						mMode = 1;
-                        //フォーカスボタン、マスクボタン、ズームボタンを見えなくする
-						//for 1.5 撮影中でもフォーカスできるようにする
-                        //mFocusButton.setVisibility(View.INVISIBLE);
-
-                        //アニメーションをクリアしてからでないとvisibilityが操作できないためクリア
-                        mMaskButton.clearAnimation();
-                        mMaskButton.setVisibility(View.INVISIBLE);
-                        if(mPreview.isZoomSupported()){
-                        	FrameLayout zoom = (FrameLayout)findViewById(R.id.zoom_layout);
-                        	zoom.setVisibility(View.INVISIBLE);
-                        }
+						start();
 					}
 					else{
-						mPreview.stopShooting();
-						mMode = 0;
-                        //フォーカスボタン、マスクボタン、ズームボタンを見えるようにする
-                        //mFocusButton.setVisibility(View.VISIBLE);
-                        mMaskButton.clearAnimation();
-                        mMaskButton.setVisibility(View.VISIBLE);
-                        //TODO:for tablet
-                        if(mDegree != 0){
-                            RotateAnimation rotate = new RotateAnimation(
-                                    0, 
-                                    mPrevTarget, 
-                                    mMaskButton.getWidth()/2, 
-                                    mMaskButton.getHeight()/2);
-                            rotate.setDuration(0);
-                            rotate.setFillAfter(true);
-                            mMaskButton.startAnimation(rotate);
-                        }
-                        
-                        if(mPreview.isZoomSupported()){
-                        	FrameLayout zoom = (FrameLayout)findViewById(R.id.zoom_layout);
-                        	zoom.setVisibility(View.VISIBLE);
-                        }
+						stop();
 					}
 				}
 			}
@@ -346,6 +318,46 @@ public class ContShooting extends ActionBarActivity {
         frame.addView(mOverlay, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
     }
     
+    void start(){
+		mPreview.resumeShooting();
+		mMode = 1;
+        //フォーカスボタン、マスクボタン、ズームボタンを見えなくする
+		//for 1.5 撮影中でもフォーカスできるようにする
+        //mFocusButton.setVisibility(View.INVISIBLE);
+
+        //アニメーションをクリアしてからでないとvisibilityが操作できないためクリア
+        mMaskButton.clearAnimation();
+        mMaskButton.setVisibility(View.INVISIBLE);
+        if(mPreview.isZoomSupported()){
+        	FrameLayout zoom = (FrameLayout)findViewById(R.id.zoom_layout);
+        	zoom.setVisibility(View.INVISIBLE);
+        }
+    }
+    
+    void stop(){
+		mPreview.stopShooting();
+		mMode = 0;
+        //フォーカスボタン、マスクボタン、ズームボタンを見えるようにする
+        //mFocusButton.setVisibility(View.VISIBLE);
+        mMaskButton.clearAnimation();
+        mMaskButton.setVisibility(View.VISIBLE);
+        //TODO:for tablet
+        if(mDegree != 0){
+            RotateAnimation rotate = new RotateAnimation(
+                    0, 
+                    mPrevTarget, 
+                    mMaskButton.getWidth()/2, 
+                    mMaskButton.getHeight()/2);
+            rotate.setDuration(0);
+            rotate.setFillAfter(true);
+            mMaskButton.startAnimation(rotate);
+        }
+        
+        if(mPreview.isZoomSupported()){
+        	FrameLayout zoom = (FrameLayout)findViewById(R.id.zoom_layout);
+        	zoom.setVisibility(View.VISIBLE);
+        }
+    }
     
     void clearCanvas(){
         enableMask();
@@ -718,6 +730,14 @@ public class ContShooting extends ActionBarActivity {
     
     public int getDegree(){
         return mDegree;
+    }
+    
+    void shootIfAuto(){
+    	//初回起動時かつ自動連写設定のときに連写
+    	if(mAutoFlag){
+    		start();
+    		mAutoFlag = false;
+    	}
     }
     
     protected void onPause(){

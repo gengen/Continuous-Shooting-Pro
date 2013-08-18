@@ -53,6 +53,10 @@
 	<string name="interval_not_set">指定無し</string>
 	<string name="str_sec">秒</string>
 	
+	<string name="auto_shoot">auto_shoot</string>
+	<string name="auto_shoot_title">自動連写</string>
+	<string name="auto_shoot_summary">起動時に自動で連写する</string>
+	
     <string name="display_hide">display_hide</string>
 	<string name="display_hide_title">隠しモード設定</string>
 	<string name="display_hide_summary">起動時に「隠しモード」に設定する</string>
