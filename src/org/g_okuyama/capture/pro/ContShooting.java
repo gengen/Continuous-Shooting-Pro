@@ -14,8 +14,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.hardware.SensorManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore.Images.Media;
@@ -78,7 +81,12 @@ public class ContShooting extends ActionBarActivity {
     private ImageButton mButton = null;
     private ImageButton mMaskButton = null;
     private ImageButton mFocusButton = null;
-    private SeekBar mSeekBar = null;
+        
+    private SeekBar mEVSeekBar = null;
+    private ImageView mEVOut = null;
+    private ImageView mEVIn = null;
+
+    private SeekBar mZoomSeekBar = null;
     private ImageView mZoomOut = null;
     private ImageView mZoomIn = null;
     
@@ -191,18 +199,17 @@ public class ContShooting extends ActionBarActivity {
         ImageButton[] btns = {mButton, mMaskButton, mFocusButton};
         
         int target = 0;
-        //TODO:for tablet
         if(degree == 0){
-            target = 0;
+        	target = isPhone() ? 0 : 90;
         }
         else if(degree == 90){
-            target = -90;
+        	target = isPhone() ? -90 : 0;
         }
         else if(degree == 180){
-            target = 180;
+        	target = isPhone() ? 180 : -90;
         }
         else if(degree == 270){
-            target = 90;
+        	target = isPhone() ? 90 : 180;
         }
         
         for(ImageButton btn : btns){
@@ -220,28 +227,14 @@ public class ContShooting extends ActionBarActivity {
         rotate.setFillAfter(true);
         mText.startAnimation(rotate);
         
-        RotateAnimation rotateZoomIn = new RotateAnimation(mPrevTarget, target, mZoomIn.getWidth()/2, mZoomIn.getHeight()/2);
-        rotateZoomIn.setDuration(500);
-        rotateZoomIn.setFillAfter(true);
-        mZoomIn.startAnimation(rotateZoomIn);
+        ImageView[] imgs = {mZoomIn, mZoomOut, mEVIn, mEVOut};
         
-        RotateAnimation rotateZoomOut = new RotateAnimation(mPrevTarget, target, mZoomOut.getWidth()/2, mZoomOut.getHeight()/2);
-        rotateZoomOut.setDuration(500);
-        rotateZoomOut.setFillAfter(true);
-        mZoomOut.startAnimation(rotateZoomOut);
-        
-        //回転時、表示がズレるので、断念
-        /*
-        if(mWebView != null){
-            int x = mWebView.getWidth()/2;
-            int y = mWebView.getHeight()/2;
-            Log.d(TAG, "x,y = " + x + "," + y);
-            RotateAnimation rotateWeb = new RotateAnimation(mPrevTarget, target, 100, 100);
-            rotateWeb.setDuration(0);
-            rotateWeb.setFillAfter(true);
-            mWebView.startAnimation(rotate);
+        for(ImageView img: imgs){
+            RotateAnimation rotateimg = new RotateAnimation(mPrevTarget, target, img.getWidth()/2, img.getHeight()/2);
+            rotateimg.setDuration(500);
+            rotateimg.setFillAfter(true);
+            img.startAnimation(rotateimg);
         }
-        */
         
         mPrevTarget = target;
     }
@@ -290,9 +283,43 @@ public class ContShooting extends ActionBarActivity {
             setToHidden();
         }
         
-        //seekbar
-        mSeekBar = (SeekBar)findViewById(R.id.zoom_seek);
-        mSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener(){
+        //seekbar for EV
+        mEVSeekBar = (SeekBar)findViewById(R.id.ev_seek);
+        /*
+        int inc = mSeekBar.getKeyProgressIncrement();
+        Log.d(TAG, "increment = " + inc);
+        mSeekBar.setKeyProgressIncrement(50);
+        inc = mSeekBar.getKeyProgressIncrement();
+        Log.d(TAG, "increment = " + inc);
+        */
+        mEVSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener(){
+
+            public void onProgressChanged(SeekBar bar, int progress, boolean fromuser) {
+            	//10の倍数でないときは何もしない
+            	//if(!(progress % 10 == 0)){
+            	//return;
+            	//}
+            	//->連続ではなく別の場所をタップしたときに照度変更ができなかったため削除
+            	
+				if(mPreview != null){
+	                mPreview.setExposureValue(progress);
+				}
+            }
+
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+            
+        });
+        
+        mEVIn = (ImageView)findViewById(R.id.ev_in);
+        mEVOut = (ImageView)findViewById(R.id.ev_out);
+        
+        //seekbar for zoom
+        mZoomSeekBar = (SeekBar)findViewById(R.id.zoom_seek);
+        mZoomSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener(){
 
             public void onProgressChanged(SeekBar bar, int progress, boolean fromuser) {
                 //Log.d(TAG, "progress = " + progress);
@@ -328,9 +355,10 @@ public class ContShooting extends ActionBarActivity {
         //アニメーションをクリアしてからでないとvisibilityが操作できないためクリア
         mMaskButton.clearAnimation();
         mMaskButton.setVisibility(View.INVISIBLE);
-        if(mPreview.isZoomSupported()){
-        	FrameLayout zoom = (FrameLayout)findViewById(R.id.zoom_layout);
-        	zoom.setVisibility(View.INVISIBLE);
+        
+        if(mPreview.isEVSupported() || mPreview.isZoomSupported()){
+        	FrameLayout ev = (FrameLayout)findViewById(R.id.settings_layout);
+        	ev.setVisibility(View.INVISIBLE);
         }
     }
     
@@ -341,7 +369,6 @@ public class ContShooting extends ActionBarActivity {
         //mFocusButton.setVisibility(View.VISIBLE);
         mMaskButton.clearAnimation();
         mMaskButton.setVisibility(View.VISIBLE);
-        //TODO:for tablet
         if(mDegree != 0){
             RotateAnimation rotate = new RotateAnimation(
                     0, 
@@ -353,9 +380,9 @@ public class ContShooting extends ActionBarActivity {
             mMaskButton.startAnimation(rotate);
         }
         
-        if(mPreview.isZoomSupported()){
-        	FrameLayout zoom = (FrameLayout)findViewById(R.id.zoom_layout);
-        	zoom.setVisibility(View.VISIBLE);
+        if(mPreview.isEVSupported() || mPreview.isZoomSupported()){
+        	FrameLayout ev = (FrameLayout)findViewById(R.id.settings_layout);
+        	ev.setVisibility(View.VISIBLE);
         }
     }
     
@@ -380,7 +407,6 @@ public class ContShooting extends ActionBarActivity {
         if(mMode == 0){
             mMaskButton.clearAnimation();
             mMaskButton.setVisibility(View.VISIBLE);
-            //TODO:for tablet
             if(mDegree != 0){
                 RotateAnimation rotate = new RotateAnimation(
                         0, 
@@ -716,6 +742,11 @@ public class ContShooting extends ActionBarActivity {
         zoom.setVisibility(View.INVISIBLE);
     }
     
+    void invisibleExposureView(){
+        FrameLayout ev = (FrameLayout)findViewById(R.id.ev_layout);
+        ev.setVisibility(View.INVISIBLE);
+    }
+    
     public void saveGallery(ContentValues values){
 		mResolver.insert(Media.EXTERNAL_CONTENT_URI, values);
     }
@@ -726,6 +757,25 @@ public class ContShooting extends ActionBarActivity {
     
     public boolean isMask(){
         return mMaskFlag;
+    }
+    
+    private boolean isPhone(){
+    	Context context = getApplicationContext();
+    	Resources r = context.getResources();
+    	Configuration configuration = r.getConfiguration();
+    	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB_MR2) {
+    		if ((configuration.screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK)
+    				< Configuration.SCREENLAYOUT_SIZE_LARGE) {
+    			return true;
+    		}
+
+    	} else {
+    		if (configuration.smallestScreenWidthDp < 600) {
+    			return true;
+    		}
+    	}
+    	
+    	return false;
     }
     
     public int getDegree(){
