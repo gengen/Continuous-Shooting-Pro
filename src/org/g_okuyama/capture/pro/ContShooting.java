@@ -738,12 +738,12 @@ public class ContShooting extends ActionBarActivity {
     }
 
     void invisibleZoom(){
-        FrameLayout zoom = (FrameLayout)findViewById(R.id.zoom_layout);
+        LinearLayout zoom = (LinearLayout)findViewById(R.id.zoom_layout);
         zoom.setVisibility(View.INVISIBLE);
     }
     
     void invisibleExposureView(){
-        FrameLayout ev = (FrameLayout)findViewById(R.id.ev_layout);
+        LinearLayout ev = (LinearLayout)findViewById(R.id.ev_layout);
         ev.setVisibility(View.INVISIBLE);
     }
     
