@@ -53,8 +53,8 @@
        		    android:orientation="horizontal">
 		       	<ImageView
 	   				android:id="@+id/zoom_out"		       	    
-	       	    	android:layout_width="36sp"
-	       	    	android:layout_height="36sp"
+	       	    	android:layout_width="28sp"
+	       	    	android:layout_height="28sp"
 	       	    	android:src="@drawable/zoom_out"/>
 	       		<SeekBar
        				android:id="@+id/zoom_seek"
@@ -65,8 +65,8 @@
 					android:layout_gravity="center_vertical"/>
            		<ImageView
        				android:id="@+id/zoom_in"		       	    
-	       	    	android:layout_width="36sp"
-	       	    	android:layout_height="36sp"
+	       	    	android:layout_width="28sp"
+	       	    	android:layout_height="28sp"
 	       	    	android:src="@drawable/zoom_in"/>
        　　		</LinearLayout>
        		<LinearLayout
@@ -78,8 +78,8 @@
        		    android:orientation="horizontal">
 		       	<ImageView
        				android:id="@+id/ev_out"		       	    
-		       	    android:layout_width="20sp"
-	    	   	    android:layout_height="20sp"
+		       	    android:layout_width="12sp"
+	    	   	    android:layout_height="12sp"
 	       	    	android:src="@drawable/ev_out"/>
 	       		<SeekBar
        				android:id="@+id/ev_seek"
@@ -90,8 +90,8 @@
 					android:layout_gravity="center_vertical"/>
            		<ImageView
        				android:id="@+id/ev_in"		       	    
-	       	    	android:layout_width="20sp"
-	       	    	android:layout_height="20sp"
+	       	    	android:layout_width="12sp"
+	       	    	android:layout_height="12sp"
 	       	    	android:src="@drawable/ev_in"/>
        		</LinearLayout>
    		</LinearLayout>
