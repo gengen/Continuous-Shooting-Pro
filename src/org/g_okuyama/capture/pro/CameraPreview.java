@@ -541,13 +541,13 @@ class CameraPreview implements SurfaceHolder.Callback {
     void setExposureValue(int progress){
     	int index = progress - 50;
 
-    	Log.d(TAG, "index = " + index);
+    	//Log.d(TAG, "index = " + index);
     	Camera.Parameters param = mCamera.getParameters();
     	//float step = param.getExposureCompensationStep();
     	//Log.d(TAG, "step = " + step);
     	int max = param.getMaxExposureCompensation();
     	int min = param.getMinExposureCompensation();
-    	Log.d(TAG, "max = " + max + ", min = " + min);
+    	//Log.d(TAG, "max = " + max + ", min = " + min);
     	int value = 0;
     	if(index > 0){
     		value = index * max / 50;
@@ -555,7 +555,7 @@ class CameraPreview implements SurfaceHolder.Callback {
     	else if(index < 0){
     		value = -1 * index * min / 50;
     	}
-    	Log.d(TAG, "value = " + value);
+    	//Log.d(TAG, "value = " + value);
     	param.setExposureCompensation(value);
     	mCamera.setParameters(param);
     }
