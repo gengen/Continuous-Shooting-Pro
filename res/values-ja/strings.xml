@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">無音連写カメラくんPro</string>
-    <string name="sc_hidden">Hidden mode now</string>
+    <string name="sc_hidden">Hidden mode</string>
     <string name="sc_number">撮影数</string>
     <string name="sc_menu_gallery">ギャラリー</string>
     <string name="sc_menu_gallery_ng">ギャラリーを起動できません</string>

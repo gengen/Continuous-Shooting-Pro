@@ -6,7 +6,6 @@ import java.util.Locale;
 
 import com.example.android.actionbarcompat.ActionBarActivity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
@@ -14,6 +13,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.DialogInterface.OnKeyListener;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.hardware.SensorManager;
@@ -25,6 +25,7 @@ import android.provider.MediaStore.Images.Media;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,14 +33,12 @@ import android.view.OrientationEventListener;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.RotateAnimation;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -285,13 +284,6 @@ public class ContShooting extends ActionBarActivity {
         
         //seekbar for EV
         mEVSeekBar = (SeekBar)findViewById(R.id.ev_seek);
-        /*
-        int inc = mSeekBar.getKeyProgressIncrement();
-        Log.d(TAG, "increment = " + inc);
-        mSeekBar.setKeyProgressIncrement(50);
-        inc = mSeekBar.getKeyProgressIncrement();
-        Log.d(TAG, "increment = " + inc);
-        */
         mEVSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener(){
 
             public void onProgressChanged(SeekBar bar, int progress, boolean fromuser) {
@@ -434,7 +426,7 @@ public class ContShooting extends ActionBarActivity {
         FrameLayout layout = (FrameLayout)findViewById(R.id.linear);
         layout.removeView(mWebView);
         layout.setLayoutParams(new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.FILL_PARENT, 
+                FrameLayout.LayoutParams.MATCH_PARENT, 
                 FrameLayout.LayoutParams.WRAP_CONTENT));
         mWebView.setWebViewClient(null);
         mWebView.destroy();
@@ -442,7 +434,7 @@ public class ContShooting extends ActionBarActivity {
 
         FrameLayout frame = (FrameLayout)findViewById(R.id.camera_parent);
         frame.setLayoutParams(new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.FILL_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.WRAP_CONTENT));
         
         displayNormalMode();
@@ -467,7 +459,7 @@ public class ContShooting extends ActionBarActivity {
         mWebView.getSettings().setAppCacheEnabled(false);
         FrameLayout layout = (FrameLayout)findViewById(R.id.linear);
         layout.setLayoutParams(new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.FILL_PARENT, 
+                FrameLayout.LayoutParams.MATCH_PARENT, 
                 FrameLayout.LayoutParams.WRAP_CONTENT, 
                 1));
         layout.addView(mWebView);
@@ -515,15 +507,31 @@ public class ContShooting extends ActionBarActivity {
     	
         super.onStart();
         if(!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
-            new AlertDialog.Builder(this)
-            .setTitle(R.string.sc_alert_title)
+        	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        	builder.setTitle(R.string.sc_alert_title)
             .setMessage(getString(R.string.sc_alert_sd))
             .setPositiveButton(R.string.sc_alert_ok, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    System.exit(RESULT_OK);
+                    //System.exit(RESULT_OK);
+                	finish();
                 }
-            })
-            .show();
+            });
+        	builder.setOnKeyListener(new OnKeyListener() {
+        		@Override
+        		public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+        			//バックキーと検索キーを無効化
+        			switch (keyCode) {
+        			case KeyEvent.KEYCODE_BACK:
+        			case KeyEvent.KEYCODE_SEARCH:
+        				return true;
+        			default:
+        				return false;
+        			}
+        		}
+        	});
+            AlertDialog dialog = builder.show();
+    	    //ダイアログ画面外を押された際に閉じないように設定
+    	    dialog.setCanceledOnTouchOutside(false);
         }
     }
     
@@ -532,16 +540,6 @@ public class ContShooting extends ActionBarActivity {
         menuInflater.inflate(R.menu.main, menu);
         
         super.onCreateOptionsMenu(menu);
-
-        /*
-        //オプションメニュー(ギャラリー)
-        MenuItem prefGallery = menu.add(0, MENU_DISP_GALLERY, 0, R.string.sc_menu_gallery);
-        prefGallery.setIcon(android.R.drawable.ic_menu_gallery);
-
-        //オプションメニュー(設定)
-        MenuItem prefSetting = menu.add(0, MENU_DISP_SETTING, 0, R.string.sc_menu_setting);
-        prefSetting.setIcon(android.R.drawable.ic_menu_preferences);
-        */
 
         return true;
     }
@@ -565,13 +563,6 @@ public class ContShooting extends ActionBarActivity {
     }
     
     private void startGallery(){
-    	//ギャラリーへのintent
-    	//Intent intent = new Intent(Intent.ACTION_PICK);
-    	//intent.setType("image/*");
-    	//startActivityForResult(intent, REQUEST_PICK_CONTACT);
-    	//startActivity(intent);
-    	
-    	// ギャラリー表示
     	Intent intent = null;
     	try{
     	    // for Honeycomb
@@ -610,7 +601,9 @@ public class ContShooting extends ActionBarActivity {
         	        		startActivity(intent);
         	        	}
         	        	catch(ActivityNotFoundException e4){
-        	            	Toast.makeText(this, R.string.sc_menu_gallery_ng, Toast.LENGTH_SHORT).show();
+        	    	    	intent = new Intent(Intent.ACTION_PICK);
+        	    	    	intent.setType("image/*");
+        	    	    	startActivity(intent);
         	        	}
     	        	}
     	        }
@@ -833,13 +826,6 @@ public class ContShooting extends ActionBarActivity {
     protected void onRestart(){
     	//Log.d(TAG, "enter ContShooting#onRestart");
     	super.onRestart();
-    }
-    
-    public void finish(){
-        //アプリのキャッシュ削除
-        //deleteCache(getCacheDir());
-        
-		System.exit(RESULT_OK);
     }
     
     public static boolean deleteCache(File dir) {
